@@ -31,20 +31,10 @@ public final class MessageProto {
   public enum MessageType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <pre>
-     * 心跳包
-     * </pre>
-     *
      * <code>HEARTBEAT = 0;</code>
      */
     HEARTBEAT(0),
     /**
-     * <pre>
-     * IMAGE = 2; // 未来扩展
-     * FILE = 3;  // 未来扩展
-     * ...
-     * </pre>
-     *
      * <code>TEXT = 1;</code>
      */
     TEXT(1),
@@ -61,20 +51,10 @@ public final class MessageProto {
         MessageType.class.getName());
     }
     /**
-     * <pre>
-     * 心跳包
-     * </pre>
-     *
      * <code>HEARTBEAT = 0;</code>
      */
     public static final int HEARTBEAT_VALUE = 0;
     /**
-     * <pre>
-     * IMAGE = 2; // 未来扩展
-     * FILE = 3;  // 未来扩展
-     * ...
-     * </pre>
-     *
      * <code>TEXT = 1;</code>
      */
     public static final int TEXT_VALUE = 1;
@@ -168,23 +148,13 @@ public final class MessageProto {
 
     /**
      * <pre>
-     * 消息唯一ID (客户端生成)
+     * 消息唯一ID
      * </pre>
      *
-     * <code>string messageId = 1;</code>
+     * <code>int64 messageId = 1;</code>
      * @return The messageId.
      */
-    java.lang.String getMessageId();
-    /**
-     * <pre>
-     * 消息唯一ID (客户端生成)
-     * </pre>
-     *
-     * <code>string messageId = 1;</code>
-     * @return The bytes for messageId.
-     */
-    com.google.protobuf.ByteString
-        getMessageIdBytes();
+    long getMessageId();
 
     /**
      * <pre>
@@ -208,7 +178,7 @@ public final class MessageProto {
 
     /**
      * <pre>
-     * 接收者ID (可以是用户ID或群组ID)
+     * 接收者ID
      * </pre>
      *
      * <code>string receiverId = 3;</code>
@@ -217,7 +187,7 @@ public final class MessageProto {
     java.lang.String getReceiverId();
     /**
      * <pre>
-     * 接收者ID (可以是用户ID或群组ID)
+     * 接收者ID
      * </pre>
      *
      * <code>string receiverId = 3;</code>
@@ -247,7 +217,7 @@ public final class MessageProto {
 
     /**
      * <pre>
-     * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+     * 消息内容
      * </pre>
      *
      * <code>string content = 5;</code>
@@ -256,7 +226,7 @@ public final class MessageProto {
     java.lang.String getContent();
     /**
      * <pre>
-     * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+     * 消息内容
      * </pre>
      *
      * <code>string content = 5;</code>
@@ -297,7 +267,6 @@ public final class MessageProto {
       super(builder);
     }
     private AChatMessage() {
-      messageId_ = "";
       senderId_ = "";
       receiverId_ = "";
       type_ = 0;
@@ -318,50 +287,18 @@ public final class MessageProto {
     }
 
     public static final int MESSAGEID_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object messageId_ = "";
+    private long messageId_ = 0L;
     /**
      * <pre>
-     * 消息唯一ID (客户端生成)
+     * 消息唯一ID
      * </pre>
      *
-     * <code>string messageId = 1;</code>
+     * <code>int64 messageId = 1;</code>
      * @return The messageId.
      */
     @java.lang.Override
-    public java.lang.String getMessageId() {
-      java.lang.Object ref = messageId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        messageId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 消息唯一ID (客户端生成)
-     * </pre>
-     *
-     * <code>string messageId = 1;</code>
-     * @return The bytes for messageId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getMessageIdBytes() {
-      java.lang.Object ref = messageId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        messageId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getMessageId() {
+      return messageId_;
     }
 
     public static final int SENDERID_FIELD_NUMBER = 2;
@@ -416,7 +353,7 @@ public final class MessageProto {
     private volatile java.lang.Object receiverId_ = "";
     /**
      * <pre>
-     * 接收者ID (可以是用户ID或群组ID)
+     * 接收者ID
      * </pre>
      *
      * <code>string receiverId = 3;</code>
@@ -437,7 +374,7 @@ public final class MessageProto {
     }
     /**
      * <pre>
-     * 接收者ID (可以是用户ID或群组ID)
+     * 接收者ID
      * </pre>
      *
      * <code>string receiverId = 3;</code>
@@ -489,7 +426,7 @@ public final class MessageProto {
     private volatile java.lang.Object content_ = "";
     /**
      * <pre>
-     * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+     * 消息内容
      * </pre>
      *
      * <code>string content = 5;</code>
@@ -510,7 +447,7 @@ public final class MessageProto {
     }
     /**
      * <pre>
-     * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+     * 消息内容
      * </pre>
      *
      * <code>string content = 5;</code>
@@ -560,8 +497,8 @@ public final class MessageProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 1, messageId_);
+      if (messageId_ != 0L) {
+        output.writeInt64(1, messageId_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(senderId_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 2, senderId_);
@@ -587,8 +524,9 @@ public final class MessageProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(1, messageId_);
+      if (messageId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, messageId_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(senderId_)) {
         size += com.google.protobuf.GeneratedMessage.computeStringSize(2, senderId_);
@@ -622,8 +560,8 @@ public final class MessageProto {
       }
       cn.blazeh.achat.common.MessageProto.AChatMessage other = (cn.blazeh.achat.common.MessageProto.AChatMessage) obj;
 
-      if (!getMessageId()
-          .equals(other.getMessageId())) return false;
+      if (getMessageId()
+          != other.getMessageId()) return false;
       if (!getSenderId()
           .equals(other.getSenderId())) return false;
       if (!getReceiverId()
@@ -645,7 +583,8 @@ public final class MessageProto {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageId().hashCode();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getMessageId());
       hash = (37 * hash) + SENDERID_FIELD_NUMBER;
       hash = (53 * hash) + getSenderId().hashCode();
       hash = (37 * hash) + RECEIVERID_FIELD_NUMBER;
@@ -788,7 +727,7 @@ public final class MessageProto {
       public Builder clear() {
         super.clear();
         bitField0_ = 0;
-        messageId_ = "";
+        messageId_ = 0L;
         senderId_ = "";
         receiverId_ = "";
         type_ = 0;
@@ -859,10 +798,8 @@ public final class MessageProto {
 
       public Builder mergeFrom(cn.blazeh.achat.common.MessageProto.AChatMessage other) {
         if (other == cn.blazeh.achat.common.MessageProto.AChatMessage.getDefaultInstance()) return this;
-        if (!other.getMessageId().isEmpty()) {
-          messageId_ = other.messageId_;
-          bitField0_ |= 0x00000001;
-          onChanged();
+        if (other.getMessageId() != 0L) {
+          setMessageId(other.getMessageId());
         }
         if (!other.getSenderId().isEmpty()) {
           senderId_ = other.senderId_;
@@ -911,11 +848,11 @@ public final class MessageProto {
               case 0:
                 done = true;
                 break;
-              case 10: {
-                messageId_ = input.readStringRequireUtf8();
+              case 8: {
+                messageId_ = input.readInt64();
                 bitField0_ |= 0x00000001;
                 break;
-              } // case 10
+              } // case 8
               case 18: {
                 senderId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000002;
@@ -958,60 +895,30 @@ public final class MessageProto {
       }
       private int bitField0_;
 
-      private java.lang.Object messageId_ = "";
+      private long messageId_ ;
       /**
        * <pre>
-       * 消息唯一ID (客户端生成)
+       * 消息唯一ID
        * </pre>
        *
-       * <code>string messageId = 1;</code>
+       * <code>int64 messageId = 1;</code>
        * @return The messageId.
        */
-      public java.lang.String getMessageId() {
-        java.lang.Object ref = messageId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          messageId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public long getMessageId() {
+        return messageId_;
       }
       /**
        * <pre>
-       * 消息唯一ID (客户端生成)
+       * 消息唯一ID
        * </pre>
        *
-       * <code>string messageId = 1;</code>
-       * @return The bytes for messageId.
-       */
-      public com.google.protobuf.ByteString
-          getMessageIdBytes() {
-        java.lang.Object ref = messageId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          messageId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 消息唯一ID (客户端生成)
-       * </pre>
-       *
-       * <code>string messageId = 1;</code>
+       * <code>int64 messageId = 1;</code>
        * @param value The messageId to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageId(
-          java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+      public Builder setMessageId(long value) {
+
         messageId_ = value;
         bitField0_ |= 0x00000001;
         onChanged();
@@ -1019,33 +926,15 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 消息唯一ID (客户端生成)
+       * 消息唯一ID
        * </pre>
        *
-       * <code>string messageId = 1;</code>
+       * <code>int64 messageId = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageId() {
-        messageId_ = getDefaultInstance().getMessageId();
         bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息唯一ID (客户端生成)
-       * </pre>
-       *
-       * <code>string messageId = 1;</code>
-       * @param value The bytes for messageId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        messageId_ = value;
-        bitField0_ |= 0x00000001;
+        messageId_ = 0L;
         onChanged();
         return this;
       }
@@ -1145,7 +1034,7 @@ public final class MessageProto {
       private java.lang.Object receiverId_ = "";
       /**
        * <pre>
-       * 接收者ID (可以是用户ID或群组ID)
+       * 接收者ID
        * </pre>
        *
        * <code>string receiverId = 3;</code>
@@ -1165,7 +1054,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 接收者ID (可以是用户ID或群组ID)
+       * 接收者ID
        * </pre>
        *
        * <code>string receiverId = 3;</code>
@@ -1186,7 +1075,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 接收者ID (可以是用户ID或群组ID)
+       * 接收者ID
        * </pre>
        *
        * <code>string receiverId = 3;</code>
@@ -1203,7 +1092,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 接收者ID (可以是用户ID或群组ID)
+       * 接收者ID
        * </pre>
        *
        * <code>string receiverId = 3;</code>
@@ -1217,7 +1106,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 接收者ID (可以是用户ID或群组ID)
+       * 接收者ID
        * </pre>
        *
        * <code>string receiverId = 3;</code>
@@ -1310,7 +1199,7 @@ public final class MessageProto {
       private java.lang.Object content_ = "";
       /**
        * <pre>
-       * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+       * 消息内容
        * </pre>
        *
        * <code>string content = 5;</code>
@@ -1330,7 +1219,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+       * 消息内容
        * </pre>
        *
        * <code>string content = 5;</code>
@@ -1351,7 +1240,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+       * 消息内容
        * </pre>
        *
        * <code>string content = 5;</code>
@@ -1368,7 +1257,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+       * 消息内容
        * </pre>
        *
        * <code>string content = 5;</code>
@@ -1382,7 +1271,7 @@ public final class MessageProto {
       }
       /**
        * <pre>
-       * 消息内容 (对于TEXT类型是文本，对于其他是URL或其他元信息)
+       * 消息内容
        * </pre>
        *
        * <code>string content = 5;</code>
@@ -1509,7 +1398,7 @@ public final class MessageProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\rmessage.proto\022\026cn.blazeh.achat.common\"" +
-      "\236\001\n\014AChatMessage\022\021\n\tmessageId\030\001 \001(\t\022\020\n\010s" +
+      "\236\001\n\014AChatMessage\022\021\n\tmessageId\030\001 \001(\003\022\020\n\010s" +
       "enderId\030\002 \001(\t\022\022\n\nreceiverId\030\003 \001(\t\0221\n\004typ" +
       "e\030\004 \001(\0162#.cn.blazeh.achat.common.Message" +
       "Type\022\017\n\007content\030\005 \001(\t\022\021\n\ttimestamp\030\006 \001(\003" +

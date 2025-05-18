@@ -11,7 +11,7 @@ enum MessageType {
 }
 
 message AChatMessage {
-  string messageId = 1;   // 消息唯一ID
+  int64 messageId = 1;    // 消息唯一ID
   string senderId = 2;    // 发送者ID
   string receiverId = 3;  // 接收者ID
   MessageType type = 4;   // 消息类型

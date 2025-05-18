@@ -16,7 +16,6 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +31,7 @@ public class AChatClient {
         this.uid = uid;
 
         heartbeat = AChatMessage.newBuilder()
-                .setMessageId(UUID.randomUUID().toString())
+                .setMessageId(System.currentTimeMillis())
                 .setSenderId(uid)
                 .setReceiverId("server")
                 .setType(MessageType.HEARTBEAT)
@@ -92,7 +91,7 @@ public class AChatClient {
                 System.out.println("格式错误，用法：<用户id> <消息>");
             } else {
                 channel.writeAndFlush(AChatMessage.newBuilder()
-                        .setMessageId(UUID.randomUUID().toString())
+                        .setMessageId(System.currentTimeMillis())
                         .setSenderId(uid)
                         .setReceiverId(args[0])
                         .setType(MessageType.TEXT)

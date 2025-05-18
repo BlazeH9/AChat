@@ -2,6 +2,7 @@ package cn.blazeh.achat.server.handler;
 
 import cn.blazeh.achat.common.MessageProto.AChatMessage;
 import cn.blazeh.achat.common.MessageProto.MessageType;
+import cn.blazeh.achat.server.util.IdGenerator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -42,24 +43,22 @@ public class AChatServerHandler extends SimpleChannelInboundHandler<AChatMessage
             System.out.println("用户 " + msg.getSenderId() + " 已上线");
         }
 
-        if (msg.getType() == MessageType.HEARTBEAT) {
-            AChatMessage heartbeatResponse = AChatMessage.newBuilder()
-                    .setType(MessageType.HEARTBEAT)
-                    .setSenderId("server")
-                    .setReceiverId(msg.getSenderId())
-                    .setTimestamp(System.currentTimeMillis())
-                    .setContent("pong")
-                    .build();
-            ctx.writeAndFlush(heartbeatResponse);
+        if (msg.getType() == MessageType.HEARTBEAT)
             return;
-        }
-
 
         String receiverId = msg.getReceiverId();
         Channel receiverChannel = userChannelMap.get(receiverId);
 
         if (receiverChannel != null && receiverChannel.isActive()) {
-            receiverChannel.writeAndFlush(msg);
+            receiverChannel.writeAndFlush(AChatMessage.newBuilder()
+                    .setMessageId(IdGenerator.nextId())
+                    .setSenderId(msg.getSenderId())
+                    .setReceiverId(receiverId)
+                    .setType(msg.getType())
+                    .setContent(msg.getContent())
+                    .setTimestamp(System.currentTimeMillis())
+                    .build()
+            );
             System.out.println("消息转发至 " + receiverId);
         } else {
             System.out.println("用户 " + receiverId + " 已离线或不存在，消息转发失败");
