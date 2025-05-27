@@ -1,18 +1,19 @@
 package cn.blazeh.achat.server.handler;
 
-import cn.blazeh.achat.common.MessageProto.AChatMessage;
-import cn.blazeh.achat.common.MessageProto.MessageType;
-import cn.blazeh.achat.server.util.IdGenerator;
-import io.netty.channel.Channel;
+import cn.blazeh.achat.common.handler.AChatHandler;
+import cn.blazeh.achat.common.handler.AChatUndefinedHandler;
+import cn.blazeh.achat.common.proto.MessageProto.*;
+import cn.blazeh.achat.server.service.AuthService;
+import cn.blazeh.achat.server.service.ConnectionService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+public class AChatServerHandler extends SimpleChannelInboundHandler<AChatEnvelope> {
 
-public class AChatServerHandler extends SimpleChannelInboundHandler<AChatMessage> {
-
-    private static final Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
+    private final AChatHandler[] handlers = {
+            new AChatUndefinedHandler(), new AChatHeartbeatHandler(), new AChatAuthHandler(),
+            new AChatChatHandler()
+    };
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
@@ -22,59 +23,32 @@ public class AChatServerHandler extends SimpleChannelInboundHandler<AChatMessage
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         System.out.println("客户端断开连接: " + ctx.channel().remoteAddress());
-        userChannelMap.entrySet().stream()
-                .filter(entry -> entry.getValue() == ctx.channel())
-                .findFirst()
-                .ifPresent(entry -> {
-                    String userId = entry.getKey();
-                    userChannelMap.remove(userId);
-                    System.out.println("用户 " + userId + " 已离线");
-                });
+        ConnectionService.INSTANCE.terminate(ctx.channel());
         ctx.close();
     }
 
-
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, AChatMessage msg) {
-        System.out.println("收到客户端消息: " + msg.getSenderId() + " -> " + msg.getReceiverId() + ": " + msg.getContent());
-
-        if (!userChannelMap.containsKey(msg.getSenderId())) {
-            userChannelMap.put(msg.getSenderId(), ctx.channel());
-            System.out.println("用户 " + msg.getSenderId() + " 已上线");
-        }
-
-        if (msg.getType() == MessageType.HEARTBEAT)
+    protected void channelRead0(ChannelHandlerContext ctx, AChatEnvelope msg) {
+        System.out.println("收到客户端数据包：" + msg.getType());
+        if(!msg.getType().equals(AChatType.AUTH) && !AuthService.INSTANCE.sessionAuth(msg.getSessionId())) {
+            System.out.println("数据包中携带非法Session ID：" + ctx.channel().remoteAddress());
             return;
-
-        String receiverId = msg.getReceiverId();
-        Channel receiverChannel = userChannelMap.get(receiverId);
-
-        if (receiverChannel != null && receiverChannel.isActive()) {
-            receiverChannel.writeAndFlush(AChatMessage.newBuilder()
-                    .setMessageId(IdGenerator.nextId())
-                    .setSenderId(msg.getSenderId())
-                    .setReceiverId(receiverId)
-                    .setType(msg.getType())
-                    .setContent(msg.getContent())
-                    .setTimestamp(System.currentTimeMillis())
-                    .build()
-            );
-            System.out.println("消息转发至 " + receiverId);
-        } else {
-            System.out.println("用户 " + receiverId + " 已离线或不存在，消息转发失败");
         }
+        handlers[msg.getType().getNumber()].handle(ctx, msg);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
-        userChannelMap.entrySet().stream()
-                .filter(entry -> entry.getValue() == ctx.channel())
-                .findFirst()
-                .ifPresent(entry -> {
-                    userChannelMap.remove(entry.getKey());
-                    System.out.println("用户 " + entry.getKey() + " 因异常报错而被强制下线");
-                });
+        System.out.println("客户端异常断开连接: " + ctx.channel().remoteAddress());
+        ConnectionService.INSTANCE.terminate(ctx.channel());
         ctx.close();
     }
+
+    public static AChatEnvelope.Builder getEnvelopeBuilder() {
+        return AChatEnvelope.newBuilder()
+                .setTimestamp(System.currentTimeMillis())
+                .setSessionId("");
+    }
+
 }

@@ -1,20 +1,44 @@
 syntax = "proto3";
 
-package cn.blazeh.achat.common;
+package cn.blazeh.achat.common.proto;
 
-option java_package = "cn.blazeh.achat.common";
+option java_package = "cn.blazeh.achat.common.proto";
 option java_outer_classname = "MessageProto";
 
-enum MessageType {
-  HEARTBEAT = 0;
-  TEXT = 1;
+enum AChatType {
+  UNDEFINED = 0;      // 未定义类型，不应使用
+  HEARTBEAT = 1;      // 心跳包
+  AUTH = 2;           // 用户认证
+  CHAT = 3;           // 聊天消息
 }
 
-message AChatMessage {
+message AChatHeartbeat {}
+
+message AChatAuth {
+  bool flag = 1;        // 是否注册或是否登录成功
+  string first = 2;     // 用户名或登录信息
+  string second = 3;    // 密码或Session ID
+}
+
+enum MessageType {
+  TEXT = 0;
+}
+
+message AChatChat {
   int64 messageId = 1;    // 消息唯一ID
   string senderId = 2;    // 发送者ID
   string receiverId = 3;  // 接收者ID
   MessageType type = 4;   // 消息类型
   string content = 5;     // 消息内容
-  int64 timestamp = 6;    // 发送时间戳 (毫秒)
+}
+
+message AChatEnvelope {
+  AChatType type = 1;     // 消息类型
+  int64 timestamp = 2;    // 毫秒级时间戳
+  string sessionId = 3;   // Session ID
+  oneof payload {
+    AChatHeartbeat heartbeat = 4;
+    AChatAuth auth = 5;
+    AChatChat chat = 6;
+  }
 }

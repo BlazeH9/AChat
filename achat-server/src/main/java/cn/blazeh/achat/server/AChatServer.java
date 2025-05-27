@@ -1,6 +1,6 @@
 package cn.blazeh.achat.server;
 
-import cn.blazeh.achat.common.MessageProto.AChatMessage;
+import cn.blazeh.achat.common.proto.MessageProto.AChatEnvelope;
 import cn.blazeh.achat.server.handler.AChatServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -30,7 +30,7 @@ public class AChatServer {
                         protected void initChannel(SocketChannel ch) {
                             ch.pipeline()
                                     .addLast(new ProtobufVarint32FrameDecoder())
-                                    .addLast(new ProtobufDecoder(AChatMessage.getDefaultInstance()))
+                                    .addLast(new ProtobufDecoder(AChatEnvelope.getDefaultInstance()))
                                     .addLast(new ProtobufVarint32LengthFieldPrepender())
                                     .addLast(new ProtobufEncoder())
                                     .addLast(new AChatServerHandler());
