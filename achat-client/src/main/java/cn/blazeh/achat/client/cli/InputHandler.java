@@ -2,10 +2,14 @@ package cn.blazeh.achat.client.cli;
 
 import cn.blazeh.achat.client.manager.ConnectionManager;
 import cn.blazeh.achat.client.service.ChatService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
 public class InputHandler implements Runnable {
+
+    private static final Logger LOGGER = LogManager.getLogger(InputHandler.class);
 
     private final ChatService chat;
     private final InputStream input;
@@ -28,7 +32,7 @@ public class InputHandler implements Runnable {
                 }
                 String[] args = line.split("\\s+", 2);
                 if(args.length <= 1)
-                    System.out.println("格式错误，用法：<用户id> <消息>");
+                    LOGGER.info("格式错误，用法：<用户id> <消息>");
                 else
                     chat.sendMessage(args[0], args[1]);
             }

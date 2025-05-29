@@ -6,12 +6,16 @@ import cn.blazeh.achat.server.service.AuthService;
 import cn.blazeh.achat.server.service.ConnectionService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AChatAuthHandler implements AChatHandler {
 
+    private static final Logger LOGGER = LogManager.getLogger(AChatAuthHandler.class);
+
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
-        System.out.println("接收到验证请求：" + ctx.channel().remoteAddress());
+        LOGGER.debug("接收到验证请求：{}", ctx.channel().remoteAddress());
         AChatAuth auth = envelope.getAuth();
         Channel channel = ctx.channel();
         if(auth.getFlag()) {

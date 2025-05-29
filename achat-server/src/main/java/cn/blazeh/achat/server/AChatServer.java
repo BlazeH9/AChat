@@ -11,9 +11,12 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AChatServer {
 
+    private static final Logger LOGGER = LogManager.getLogger(AChatServer.class);
     public static final int PORT = 8080;
 
     public static void main(String[] args) throws Exception {
@@ -37,7 +40,7 @@ public class AChatServer {
                         }
                     });
             ChannelFuture future = bootstrap.bind(PORT).sync();
-            System.out.println("服务器已开启，监听端口：" + PORT);
+            LOGGER.info("服务器已开启，监听端口：{}", PORT);
             future.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();

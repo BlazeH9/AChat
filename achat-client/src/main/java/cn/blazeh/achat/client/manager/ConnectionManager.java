@@ -12,6 +12,8 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,6 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public enum ConnectionManager {
 
     INSTANCE;
+
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
 
     private final EventLoopGroup group = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
     private final AtomicBoolean connected = new AtomicBoolean(false);
@@ -46,7 +50,7 @@ public enum ConnectionManager {
             SessionManager.INSTANCE.getSession().setChannel(future.channel());
             SessionManager.INSTANCE.getSession().setAuthState(Session.AuthState.READY);
             connected.set(true);
-            System.out.println("已连接至服务器");
+            LOGGER.info("已连接至服务器 {}:{}", host, port);
         });
         return Optional.of(future);
     }

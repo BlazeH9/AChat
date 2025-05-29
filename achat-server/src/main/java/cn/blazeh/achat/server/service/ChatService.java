@@ -7,10 +7,14 @@ import cn.blazeh.achat.server.manager.SessionManager;
 import cn.blazeh.achat.server.model.UserSession;
 import cn.blazeh.achat.server.util.IdGenerator;
 import io.netty.channel.Channel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public enum ChatService {
 
     INSTANCE;
+
+    private static final Logger LOGGER = LogManager.getLogger(ChatService.class);
 
     public boolean sendPrivateMessage(String senderId, AChatChat msg) {
         return SessionManager.INSTANCE.getSession(msg.getReceiverId())
@@ -18,7 +22,7 @@ public enum ChatService {
                 .flatMap(ChannelManager.INSTANCE::getChannel)
                 .filter(Channel::isActive)
                 .map(channel -> {
-                    System.out.println("私聊消息: " + senderId + " -> " + msg.getReceiverId() + ": " + msg.getContent());
+                    LOGGER.debug("发送私聊消息：{} -> {}: {}", senderId, msg.getReceiverId(), msg.getContent());
                     channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                             .setType(AChatType.CHAT)
                             .setChat(msg.toBuilder()

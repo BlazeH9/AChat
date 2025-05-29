@@ -6,19 +6,23 @@ import cn.blazeh.achat.common.proto.MessageProto.AChatEnvelope;
 import cn.blazeh.achat.server.service.ChatService;
 import cn.blazeh.achat.server.service.UserService;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AChatChatHandler implements AChatHandler {
+
+    private static final Logger LOGGER = LogManager.getLogger(AChatChatHandler.class);
 
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
         UserService.INSTANCE.getUserId(envelope.getSessionId()).ifPresent(senderId -> {
             AChatChat msg = envelope.getChat();
             String receiverId = msg.getReceiverId();
-            System.out.println("收到客户端消息: " + senderId + " -> " + receiverId + ": " + msg.getContent());
+            LOGGER.debug("收到客户端消息：{} -> {} : {}", senderId, receiverId, msg.getContent());
             if(ChatService.INSTANCE.sendPrivateMessage(senderId, msg)) {
-                System.out.println("消息转发至 " + receiverId);
+                LOGGER.debug("消息转发至 {}", receiverId);
             } else {
-                System.out.println("用户 " + receiverId + " 已离线或不存在，消息转发失败");
+                LOGGER.debug("用户 {} 已离线或不存在，消息转发失败", receiverId);
             }
         });
     }

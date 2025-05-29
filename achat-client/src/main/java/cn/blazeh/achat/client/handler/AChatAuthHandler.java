@@ -5,21 +5,25 @@ import cn.blazeh.achat.client.model.Session;
 import cn.blazeh.achat.common.handler.AChatHandler;
 import cn.blazeh.achat.common.proto.MessageProto.*;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
 public class AChatAuthHandler implements AChatHandler {
 
+    private static final Logger LOGGER = LogManager.getLogger(AChatAuthHandler.class);
+
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
-        System.out.println("接收到验证响应");
+        LOGGER.debug("接收到验证响应");
         AChatAuth auth = envelope.getAuth();
         if(auth.getFlag()) {
-            System.out.println("登录成功：" + auth.getFirst());
+            LOGGER.info("登录成功：{}", auth.getFirst());
             SessionManager.INSTANCE.getSession().setAuthState(Session.AuthState.DONE);
             SessionManager.INSTANCE.getSession().setSessionId(UUID.fromString(auth.getSecond()));
         } else {
-            System.out.println("登录失败：" + auth.getFirst());
+            LOGGER.info("登录失败：{}", auth.getFirst());
             SessionManager.INSTANCE.getSession().setAuthState(Session.AuthState.READY);
         }
     }
