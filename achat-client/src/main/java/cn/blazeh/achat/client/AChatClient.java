@@ -32,8 +32,8 @@ public class AChatClient {
         new InputHandler(chat, System.in).run();
     }
 
-    public void authenticate(String userId, String password) {
-        auth.sendAuthRequest(userId, password, false);
+    public void authenticate(String userId, String password, boolean register) {
+        auth.sendAuthRequest(userId, password, register);
     }
 
     public static void main(String[] args) throws Exception {
@@ -43,9 +43,10 @@ public class AChatClient {
         LOGGER.info("正在等待用户登录……");
         while(!SessionManager.INSTANCE.getSession().getAuthState().equals(Session.AuthState.DONE)) {
             if(SessionManager.INSTANCE.getSession().getAuthState().equals(Session.AuthState.READY)) {
-                String userId = scanner.nextLine();
-                String password = scanner.nextLine();
-                client.authenticate(userId, password);
+                String cmd = scanner.next();
+                String userId = scanner.next();
+                String password = scanner.next();
+                client.authenticate(userId, password, cmd.equalsIgnoreCase("register"));
             }
             Thread.sleep(3000);
         }

@@ -13,6 +13,10 @@ public enum AuthService {
         return UserManager.INSTANCE.check(userId, password);
     }
 
+    public boolean registerAuth(String userId, String password) {
+        return UserManager.INSTANCE.add(userId, password);
+    }
+
     public boolean sessionAuth(String sessionId) {
         return sessionAuth(UUID.fromString(sessionId));
     }

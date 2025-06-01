@@ -18,10 +18,30 @@ public class AChatAuthHandler implements AChatHandler {
         LOGGER.debug("接收到验证请求：{}", ctx.channel().remoteAddress());
         AChatAuth auth = envelope.getAuth();
         Channel channel = ctx.channel();
+        String userId = auth.getFirst(), password = auth.getSecond();
         if(auth.getFlag()) {
-            // TODO: 注册
+            if(AuthService.INSTANCE.registerAuth(userId, password)) {
+                String sessionId = ConnectionService.INSTANCE.establish(userId, channel).toString();
+                channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
+                        .setType(AChatType.AUTH)
+                        .setAuth(AChatAuth.newBuilder()
+                                .setFlag(true)
+                                .setFirst("注册成功")
+                                .setSecond(sessionId)
+                        )
+                );
+            } else {
+                channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
+                        .setType(AChatType.AUTH)
+                        .setAuth(AChatAuth.newBuilder()
+                                .setFlag(false)
+                                .setFirst("注册失败，该用户名已被占用")
+                                .setSecond("")
+                        )
+                        .build()
+                );
+            }
         } else {
-            String userId = auth.getFirst(), password = auth.getSecond();
             if(AuthService.INSTANCE.loginAuth(userId, password)) {
                 String sessionId = ConnectionService.INSTANCE.establish(userId, channel).toString();
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()

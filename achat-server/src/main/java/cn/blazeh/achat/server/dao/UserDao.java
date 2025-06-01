@@ -24,4 +24,16 @@ public class UserDao {
     public static void insertUser(User user) {
         users.put(user.getUserId(), user);
     }
+
+    public static void insertUser(String userId, String password) {
+        insertUser(new User(userId, password));
+    }
+
+    public static boolean checkAndInsertUser(String userId, String password) {
+        if(users.containsKey(userId))
+            return false;
+        insertUser(userId, password);
+        return true;
+    }
+
 }

@@ -12,4 +12,12 @@ public enum UserManager {
                 .orElse(false);
     }
 
+    public boolean add(String userId, String password) {
+        return checkUserId(userId) && UserDao.checkAndInsertUser(userId, password);
+    }
+
+    public boolean checkUserId(String userId) {
+        return userId != null && !userId.isEmpty();
+    }
+
 }
