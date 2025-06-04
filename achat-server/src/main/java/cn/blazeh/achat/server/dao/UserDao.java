@@ -36,4 +36,8 @@ public class UserDao {
         return true;
     }
 
+    public static void updateUser(User user) {
+        users.put(user.getUserId(), user);
+    }
+
 }

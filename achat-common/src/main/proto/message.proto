@@ -26,10 +26,11 @@ enum MessageType {
 
 message AChatChat {
   int64 messageId = 1;    // 消息唯一ID
-  string senderId = 2;    // 发送者ID
-  string receiverId = 3;  // 接收者ID
-  MessageType type = 4;   // 消息类型
-  string content = 5;     // 消息内容
+  int64 timestamp = 2;    // 毫秒级时间戳
+  string senderId = 3;    // 发送者ID
+  string receiverId = 4;  // 接收者ID
+  MessageType type = 5;   // 消息类型
+  string content = 6;     // 消息内容
 }
 
 message AChatEnvelope {

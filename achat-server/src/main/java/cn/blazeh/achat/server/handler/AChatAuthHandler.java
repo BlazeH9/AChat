@@ -4,6 +4,7 @@ import cn.blazeh.achat.common.handler.AChatHandler;
 import cn.blazeh.achat.common.proto.MessageProto.*;
 import cn.blazeh.achat.server.service.AuthService;
 import cn.blazeh.achat.server.service.ConnectionService;
+import cn.blazeh.achat.server.service.UserService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +31,7 @@ public class AChatAuthHandler implements AChatHandler {
                                 .setSecond(sessionId)
                         )
                 );
+                UserService.INSTANCE.flushInbox(userId);
             } else {
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)
@@ -52,12 +54,13 @@ public class AChatAuthHandler implements AChatHandler {
                                 .setSecond(sessionId)
                         )
                 );
+                UserService.INSTANCE.flushInbox(userId);
             } else {
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)
                         .setAuth(AChatAuth.newBuilder()
                                 .setFlag(false)
-                                .setFirst("登陆失败，用户名或密码错误")
+                                .setFirst("登录失败，用户名或密码错误")
                                 .setSecond("")
                         )
                         .build()

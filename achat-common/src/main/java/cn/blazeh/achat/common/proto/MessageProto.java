@@ -1494,10 +1494,20 @@ public final class MessageProto {
 
     /**
      * <pre>
+     * 毫秒级时间戳
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
+
+    /**
+     * <pre>
      * 发送者ID
      * </pre>
      *
-     * <code>string senderId = 2;</code>
+     * <code>string senderId = 3;</code>
      * @return The senderId.
      */
     java.lang.String getSenderId();
@@ -1506,7 +1516,7 @@ public final class MessageProto {
      * 发送者ID
      * </pre>
      *
-     * <code>string senderId = 2;</code>
+     * <code>string senderId = 3;</code>
      * @return The bytes for senderId.
      */
     com.google.protobuf.ByteString
@@ -1517,7 +1527,7 @@ public final class MessageProto {
      * 接收者ID
      * </pre>
      *
-     * <code>string receiverId = 3;</code>
+     * <code>string receiverId = 4;</code>
      * @return The receiverId.
      */
     java.lang.String getReceiverId();
@@ -1526,7 +1536,7 @@ public final class MessageProto {
      * 接收者ID
      * </pre>
      *
-     * <code>string receiverId = 3;</code>
+     * <code>string receiverId = 4;</code>
      * @return The bytes for receiverId.
      */
     com.google.protobuf.ByteString
@@ -1537,7 +1547,7 @@ public final class MessageProto {
      * 消息类型
      * </pre>
      *
-     * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+     * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
      * @return The enum numeric value on the wire for type.
      */
     int getTypeValue();
@@ -1546,7 +1556,7 @@ public final class MessageProto {
      * 消息类型
      * </pre>
      *
-     * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+     * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
      * @return The type.
      */
     cn.blazeh.achat.common.proto.MessageProto.MessageType getType();
@@ -1556,7 +1566,7 @@ public final class MessageProto {
      * 消息内容
      * </pre>
      *
-     * <code>string content = 5;</code>
+     * <code>string content = 6;</code>
      * @return The content.
      */
     java.lang.String getContent();
@@ -1565,7 +1575,7 @@ public final class MessageProto {
      * 消息内容
      * </pre>
      *
-     * <code>string content = 5;</code>
+     * <code>string content = 6;</code>
      * @return The bytes for content.
      */
     com.google.protobuf.ByteString
@@ -1627,7 +1637,22 @@ public final class MessageProto {
       return messageId_;
     }
 
-    public static final int SENDERID_FIELD_NUMBER = 2;
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_ = 0L;
+    /**
+     * <pre>
+     * 毫秒级时间戳
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    public static final int SENDERID_FIELD_NUMBER = 3;
     @SuppressWarnings("serial")
     private volatile java.lang.Object senderId_ = "";
     /**
@@ -1635,7 +1660,7 @@ public final class MessageProto {
      * 发送者ID
      * </pre>
      *
-     * <code>string senderId = 2;</code>
+     * <code>string senderId = 3;</code>
      * @return The senderId.
      */
     @java.lang.Override
@@ -1656,7 +1681,7 @@ public final class MessageProto {
      * 发送者ID
      * </pre>
      *
-     * <code>string senderId = 2;</code>
+     * <code>string senderId = 3;</code>
      * @return The bytes for senderId.
      */
     @java.lang.Override
@@ -1674,7 +1699,7 @@ public final class MessageProto {
       }
     }
 
-    public static final int RECEIVERID_FIELD_NUMBER = 3;
+    public static final int RECEIVERID_FIELD_NUMBER = 4;
     @SuppressWarnings("serial")
     private volatile java.lang.Object receiverId_ = "";
     /**
@@ -1682,7 +1707,7 @@ public final class MessageProto {
      * 接收者ID
      * </pre>
      *
-     * <code>string receiverId = 3;</code>
+     * <code>string receiverId = 4;</code>
      * @return The receiverId.
      */
     @java.lang.Override
@@ -1703,7 +1728,7 @@ public final class MessageProto {
      * 接收者ID
      * </pre>
      *
-     * <code>string receiverId = 3;</code>
+     * <code>string receiverId = 4;</code>
      * @return The bytes for receiverId.
      */
     @java.lang.Override
@@ -1721,14 +1746,14 @@ public final class MessageProto {
       }
     }
 
-    public static final int TYPE_FIELD_NUMBER = 4;
+    public static final int TYPE_FIELD_NUMBER = 5;
     private int type_ = 0;
     /**
      * <pre>
      * 消息类型
      * </pre>
      *
-     * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+     * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
      * @return The enum numeric value on the wire for type.
      */
     @java.lang.Override public int getTypeValue() {
@@ -1739,7 +1764,7 @@ public final class MessageProto {
      * 消息类型
      * </pre>
      *
-     * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+     * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
      * @return The type.
      */
     @java.lang.Override public cn.blazeh.achat.common.proto.MessageProto.MessageType getType() {
@@ -1747,7 +1772,7 @@ public final class MessageProto {
       return result == null ? cn.blazeh.achat.common.proto.MessageProto.MessageType.UNRECOGNIZED : result;
     }
 
-    public static final int CONTENT_FIELD_NUMBER = 5;
+    public static final int CONTENT_FIELD_NUMBER = 6;
     @SuppressWarnings("serial")
     private volatile java.lang.Object content_ = "";
     /**
@@ -1755,7 +1780,7 @@ public final class MessageProto {
      * 消息内容
      * </pre>
      *
-     * <code>string content = 5;</code>
+     * <code>string content = 6;</code>
      * @return The content.
      */
     @java.lang.Override
@@ -1776,7 +1801,7 @@ public final class MessageProto {
      * 消息内容
      * </pre>
      *
-     * <code>string content = 5;</code>
+     * <code>string content = 6;</code>
      * @return The bytes for content.
      */
     @java.lang.Override
@@ -1811,17 +1836,20 @@ public final class MessageProto {
       if (messageId_ != 0L) {
         output.writeInt64(1, messageId_);
       }
+      if (timestamp_ != 0L) {
+        output.writeInt64(2, timestamp_);
+      }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(senderId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 2, senderId_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 3, senderId_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(receiverId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 3, receiverId_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 4, receiverId_);
       }
       if (type_ != cn.blazeh.achat.common.proto.MessageProto.MessageType.TEXT.getNumber()) {
-        output.writeEnum(4, type_);
+        output.writeEnum(5, type_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(content_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 5, content_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 6, content_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1836,18 +1864,22 @@ public final class MessageProto {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, messageId_);
       }
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, timestamp_);
+      }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(senderId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(2, senderId_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(3, senderId_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(receiverId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(3, receiverId_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(4, receiverId_);
       }
       if (type_ != cn.blazeh.achat.common.proto.MessageProto.MessageType.TEXT.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, type_);
+          .computeEnumSize(5, type_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(content_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(5, content_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(6, content_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -1866,6 +1898,8 @@ public final class MessageProto {
 
       if (getMessageId()
           != other.getMessageId()) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
       if (!getSenderId()
           .equals(other.getSenderId())) return false;
       if (!getReceiverId()
@@ -1887,6 +1921,9 @@ public final class MessageProto {
       hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getMessageId());
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
       hash = (37 * hash) + SENDERID_FIELD_NUMBER;
       hash = (53 * hash) + getSenderId().hashCode();
       hash = (37 * hash) + RECEIVERID_FIELD_NUMBER;
@@ -2027,6 +2064,7 @@ public final class MessageProto {
         super.clear();
         bitField0_ = 0;
         messageId_ = 0L;
+        timestamp_ = 0L;
         senderId_ = "";
         receiverId_ = "";
         type_ = 0;
@@ -2068,15 +2106,18 @@ public final class MessageProto {
           result.messageId_ = messageId_;
         }
         if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.senderId_ = senderId_;
+          result.timestamp_ = timestamp_;
         }
         if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.receiverId_ = receiverId_;
+          result.senderId_ = senderId_;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.type_ = type_;
+          result.receiverId_ = receiverId_;
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.type_ = type_;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
           result.content_ = content_;
         }
       }
@@ -2096,14 +2137,17 @@ public final class MessageProto {
         if (other.getMessageId() != 0L) {
           setMessageId(other.getMessageId());
         }
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
+        }
         if (!other.getSenderId().isEmpty()) {
           senderId_ = other.senderId_;
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
         if (!other.getReceiverId().isEmpty()) {
           receiverId_ = other.receiverId_;
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           onChanged();
         }
         if (other.type_ != 0) {
@@ -2111,7 +2155,7 @@ public final class MessageProto {
         }
         if (!other.getContent().isEmpty()) {
           content_ = other.content_;
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000020;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -2145,26 +2189,31 @@ public final class MessageProto {
                 bitField0_ |= 0x00000001;
                 break;
               } // case 8
-              case 18: {
-                senderId_ = input.readStringRequireUtf8();
+              case 16: {
+                timestamp_ = input.readInt64();
                 bitField0_ |= 0x00000002;
                 break;
-              } // case 18
+              } // case 16
               case 26: {
-                receiverId_ = input.readStringRequireUtf8();
+                senderId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
-              case 32: {
-                type_ = input.readEnum();
+              case 34: {
+                receiverId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 32
-              case 42: {
-                content_ = input.readStringRequireUtf8();
+              } // case 34
+              case 40: {
+                type_ = input.readEnum();
                 bitField0_ |= 0x00000010;
                 break;
-              } // case 42
+              } // case 40
+              case 50: {
+                content_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -2226,13 +2275,57 @@ public final class MessageProto {
         return this;
       }
 
+      private long timestamp_ ;
+      /**
+       * <pre>
+       * 毫秒级时间戳
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <pre>
+       * 毫秒级时间戳
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+
+        timestamp_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 毫秒级时间戳
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object senderId_ = "";
       /**
        * <pre>
        * 发送者ID
        * </pre>
        *
-       * <code>string senderId = 2;</code>
+       * <code>string senderId = 3;</code>
        * @return The senderId.
        */
       public java.lang.String getSenderId() {
@@ -2252,7 +2345,7 @@ public final class MessageProto {
        * 发送者ID
        * </pre>
        *
-       * <code>string senderId = 2;</code>
+       * <code>string senderId = 3;</code>
        * @return The bytes for senderId.
        */
       public com.google.protobuf.ByteString
@@ -2273,7 +2366,7 @@ public final class MessageProto {
        * 发送者ID
        * </pre>
        *
-       * <code>string senderId = 2;</code>
+       * <code>string senderId = 3;</code>
        * @param value The senderId to set.
        * @return This builder for chaining.
        */
@@ -2281,7 +2374,7 @@ public final class MessageProto {
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
         senderId_ = value;
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -2290,12 +2383,12 @@ public final class MessageProto {
        * 发送者ID
        * </pre>
        *
-       * <code>string senderId = 2;</code>
+       * <code>string senderId = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearSenderId() {
         senderId_ = getDefaultInstance().getSenderId();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -2304,7 +2397,7 @@ public final class MessageProto {
        * 发送者ID
        * </pre>
        *
-       * <code>string senderId = 2;</code>
+       * <code>string senderId = 3;</code>
        * @param value The bytes for senderId to set.
        * @return This builder for chaining.
        */
@@ -2313,7 +2406,7 @@ public final class MessageProto {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         senderId_ = value;
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -2324,7 +2417,7 @@ public final class MessageProto {
        * 接收者ID
        * </pre>
        *
-       * <code>string receiverId = 3;</code>
+       * <code>string receiverId = 4;</code>
        * @return The receiverId.
        */
       public java.lang.String getReceiverId() {
@@ -2344,7 +2437,7 @@ public final class MessageProto {
        * 接收者ID
        * </pre>
        *
-       * <code>string receiverId = 3;</code>
+       * <code>string receiverId = 4;</code>
        * @return The bytes for receiverId.
        */
       public com.google.protobuf.ByteString
@@ -2365,7 +2458,7 @@ public final class MessageProto {
        * 接收者ID
        * </pre>
        *
-       * <code>string receiverId = 3;</code>
+       * <code>string receiverId = 4;</code>
        * @param value The receiverId to set.
        * @return This builder for chaining.
        */
@@ -2373,7 +2466,7 @@ public final class MessageProto {
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
         receiverId_ = value;
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2382,12 +2475,12 @@ public final class MessageProto {
        * 接收者ID
        * </pre>
        *
-       * <code>string receiverId = 3;</code>
+       * <code>string receiverId = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearReceiverId() {
         receiverId_ = getDefaultInstance().getReceiverId();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
@@ -2396,7 +2489,7 @@ public final class MessageProto {
        * 接收者ID
        * </pre>
        *
-       * <code>string receiverId = 3;</code>
+       * <code>string receiverId = 4;</code>
        * @param value The bytes for receiverId to set.
        * @return This builder for chaining.
        */
@@ -2405,7 +2498,7 @@ public final class MessageProto {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         receiverId_ = value;
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2416,7 +2509,7 @@ public final class MessageProto {
        * 消息类型
        * </pre>
        *
-       * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+       * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
        * @return The enum numeric value on the wire for type.
        */
       @java.lang.Override public int getTypeValue() {
@@ -2427,13 +2520,13 @@ public final class MessageProto {
        * 消息类型
        * </pre>
        *
-       * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+       * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
        * @param value The enum numeric value on the wire for type to set.
        * @return This builder for chaining.
        */
       public Builder setTypeValue(int value) {
         type_ = value;
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -2442,7 +2535,7 @@ public final class MessageProto {
        * 消息类型
        * </pre>
        *
-       * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+       * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
        * @return The type.
        */
       @java.lang.Override
@@ -2455,7 +2548,7 @@ public final class MessageProto {
        * 消息类型
        * </pre>
        *
-       * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+       * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
        * @param value The type to set.
        * @return This builder for chaining.
        */
@@ -2463,7 +2556,7 @@ public final class MessageProto {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         type_ = value.getNumber();
         onChanged();
         return this;
@@ -2473,11 +2566,11 @@ public final class MessageProto {
        * 消息类型
        * </pre>
        *
-       * <code>.cn.blazeh.achat.common.proto.MessageType type = 4;</code>
+       * <code>.cn.blazeh.achat.common.proto.MessageType type = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         type_ = 0;
         onChanged();
         return this;
@@ -2489,7 +2582,7 @@ public final class MessageProto {
        * 消息内容
        * </pre>
        *
-       * <code>string content = 5;</code>
+       * <code>string content = 6;</code>
        * @return The content.
        */
       public java.lang.String getContent() {
@@ -2509,7 +2602,7 @@ public final class MessageProto {
        * 消息内容
        * </pre>
        *
-       * <code>string content = 5;</code>
+       * <code>string content = 6;</code>
        * @return The bytes for content.
        */
       public com.google.protobuf.ByteString
@@ -2530,7 +2623,7 @@ public final class MessageProto {
        * 消息内容
        * </pre>
        *
-       * <code>string content = 5;</code>
+       * <code>string content = 6;</code>
        * @param value The content to set.
        * @return This builder for chaining.
        */
@@ -2538,7 +2631,7 @@ public final class MessageProto {
           java.lang.String value) {
         if (value == null) { throw new NullPointerException(); }
         content_ = value;
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -2547,12 +2640,12 @@ public final class MessageProto {
        * 消息内容
        * </pre>
        *
-       * <code>string content = 5;</code>
+       * <code>string content = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearContent() {
         content_ = getDefaultInstance().getContent();
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -2561,7 +2654,7 @@ public final class MessageProto {
        * 消息内容
        * </pre>
        *
-       * <code>string content = 5;</code>
+       * <code>string content = 6;</code>
        * @param value The bytes for content to set.
        * @return This builder for chaining.
        */
@@ -2570,7 +2663,7 @@ public final class MessageProto {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         content_ = value;
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -4184,21 +4277,22 @@ public final class MessageProto {
       "\n\rmessage.proto\022\034cn.blazeh.achat.common." +
       "proto\"\020\n\016AChatHeartbeat\"8\n\tAChatAuth\022\014\n\004" +
       "flag\030\001 \001(\010\022\r\n\005first\030\002 \001(\t\022\016\n\006second\030\003 \001(" +
-      "\t\"\216\001\n\tAChatChat\022\021\n\tmessageId\030\001 \001(\003\022\020\n\010se" +
-      "nderId\030\002 \001(\t\022\022\n\nreceiverId\030\003 \001(\t\0227\n\004type" +
-      "\030\004 \001(\0162).cn.blazeh.achat.common.proto.Me" +
-      "ssageType\022\017\n\007content\030\005 \001(\t\"\254\002\n\rAChatEnve" +
-      "lope\0225\n\004type\030\001 \001(\0162\'.cn.blazeh.achat.com" +
-      "mon.proto.AChatType\022\021\n\ttimestamp\030\002 \001(\003\022\021" +
-      "\n\tsessionId\030\003 \001(\t\022A\n\theartbeat\030\004 \001(\0132,.c" +
-      "n.blazeh.achat.common.proto.AChatHeartbe" +
-      "atH\000\0227\n\004auth\030\005 \001(\0132\'.cn.blazeh.achat.com" +
-      "mon.proto.AChatAuthH\000\0227\n\004chat\030\006 \001(\0132\'.cn" +
-      ".blazeh.achat.common.proto.AChatChatH\000B\t" +
-      "\n\007payload*=\n\tAChatType\022\r\n\tUNDEFINED\020\000\022\r\n" +
-      "\tHEARTBEAT\020\001\022\010\n\004AUTH\020\002\022\010\n\004CHAT\020\003*\027\n\013Mess" +
-      "ageType\022\010\n\004TEXT\020\000B,\n\034cn.blazeh.achat.com" +
-      "mon.protoB\014MessageProtob\006proto3"
+      "\t\"\241\001\n\tAChatChat\022\021\n\tmessageId\030\001 \001(\003\022\021\n\tti" +
+      "mestamp\030\002 \001(\003\022\020\n\010senderId\030\003 \001(\t\022\022\n\nrecei" +
+      "verId\030\004 \001(\t\0227\n\004type\030\005 \001(\0162).cn.blazeh.ac" +
+      "hat.common.proto.MessageType\022\017\n\007content\030" +
+      "\006 \001(\t\"\254\002\n\rAChatEnvelope\0225\n\004type\030\001 \001(\0162\'." +
+      "cn.blazeh.achat.common.proto.AChatType\022\021" +
+      "\n\ttimestamp\030\002 \001(\003\022\021\n\tsessionId\030\003 \001(\t\022A\n\t" +
+      "heartbeat\030\004 \001(\0132,.cn.blazeh.achat.common" +
+      ".proto.AChatHeartbeatH\000\0227\n\004auth\030\005 \001(\0132\'." +
+      "cn.blazeh.achat.common.proto.AChatAuthH\000" +
+      "\0227\n\004chat\030\006 \001(\0132\'.cn.blazeh.achat.common." +
+      "proto.AChatChatH\000B\t\n\007payload*=\n\tAChatTyp" +
+      "e\022\r\n\tUNDEFINED\020\000\022\r\n\tHEARTBEAT\020\001\022\010\n\004AUTH\020" +
+      "\002\022\010\n\004CHAT\020\003*\027\n\013MessageType\022\010\n\004TEXT\020\000B,\n\034" +
+      "cn.blazeh.achat.common.protoB\014MessagePro" +
+      "tob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -4221,7 +4315,7 @@ public final class MessageProto {
     internal_static_cn_blazeh_achat_common_proto_AChatChat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_cn_blazeh_achat_common_proto_AChatChat_descriptor,
-        new java.lang.String[] { "MessageId", "SenderId", "ReceiverId", "Type", "Content", });
+        new java.lang.String[] { "MessageId", "Timestamp", "SenderId", "ReceiverId", "Type", "Content", });
     internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_fieldAccessorTable = new
