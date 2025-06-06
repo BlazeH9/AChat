@@ -1,7 +1,6 @@
-package cn.blazeh.achat.server.model;
+package cn.blazeh.achat.common.model;
 
 import cn.blazeh.achat.common.proto.MessageProto.*;
-import cn.blazeh.achat.server.util.IdGenerator;
 
 public class Message {
 
@@ -61,9 +60,12 @@ public class Message {
         private MessageType type;
         private String content;
 
-        public MessageBuilder() {
+        private final IIdGenerator generator;
+
+        public MessageBuilder(IIdGenerator generator) {
             messageId = -1;
             this.timestamp = System.currentTimeMillis();
+            this.generator = generator;
         }
 
         public MessageBuilder setMessageId(long messageId) {
@@ -118,14 +120,14 @@ public class Message {
 
         public Message build() {
             if(this.messageId < 0)
-                this.messageId = IdGenerator.nextId();
+                this.messageId = generator.nextId();
             return new Message(this);
         }
 
     }
 
-    public static MessageBuilder newBuilder() {
-        return new MessageBuilder();
+    public static MessageBuilder newBuilder(IIdGenerator generator) {
+        return new MessageBuilder(generator);
     }
 
 }

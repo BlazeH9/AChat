@@ -1,7 +1,7 @@
 package cn.blazeh.achat.server.manager;
 
+import cn.blazeh.achat.common.model.Message;
 import cn.blazeh.achat.server.dao.MessageDao;
-import cn.blazeh.achat.server.model.Message;
 
 import java.util.Optional;
 

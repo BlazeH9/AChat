@@ -1,12 +1,12 @@
 package cn.blazeh.achat.server.service;
 
+import cn.blazeh.achat.common.model.Message;
 import cn.blazeh.achat.common.proto.MessageProto;
 import cn.blazeh.achat.server.handler.AChatServerHandler;
 import cn.blazeh.achat.server.manager.ChannelManager;
 import cn.blazeh.achat.server.manager.MessageManager;
 import cn.blazeh.achat.server.manager.SessionManager;
 import cn.blazeh.achat.server.manager.UserManager;
-import cn.blazeh.achat.server.model.Message;
 import io.netty.channel.Channel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,6 +1,6 @@
 package cn.blazeh.achat.server.dao;
 
-import cn.blazeh.achat.server.model.Message;
+import cn.blazeh.achat.common.model.Message;
 
 import java.util.Map;
 import java.util.Optional;

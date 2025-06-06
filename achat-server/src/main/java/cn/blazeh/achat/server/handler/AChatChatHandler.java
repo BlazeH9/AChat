@@ -2,7 +2,7 @@ package cn.blazeh.achat.server.handler;
 
 import cn.blazeh.achat.common.handler.AChatHandler;
 import cn.blazeh.achat.common.proto.MessageProto.*;
-import cn.blazeh.achat.server.model.Message;
+import cn.blazeh.achat.server.model.MessageFactory;
 import cn.blazeh.achat.server.service.ChatService;
 import cn.blazeh.achat.server.service.UserService;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,13 +21,13 @@ public class AChatChatHandler implements AChatHandler {
             AChatChat chat = envelope.getChat();
             String receiverId = chat.getReceiverId();
             LOGGER.debug("收到客户端消息：{} -> {} : {}", senderId, receiverId, chat.getContent());
-            Message.MessageBuilder builder = Message.newBuilder()
+            ChatService.INSTANCE.processChat(MessageFactory.newBuilder()
                     .setTimestamp(System.currentTimeMillis())
                     .setType(chat.getType())
                     .setSender(senderId)
                     .setReceiver(receiverId)
-                    .setContent(chat.getContent());
-            ChatService.INSTANCE.processChat(builder);
+                    .setContent(chat.getContent())
+            );
         });
     }
 
