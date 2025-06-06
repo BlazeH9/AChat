@@ -10,6 +10,7 @@ enum AChatType {
   HEARTBEAT = 1;      // 心跳包
   AUTH = 2;           // 用户认证
   CHAT = 3;           // 聊天消息
+  SEND = 4;           // 客户端消息发送状态
 }
 
 message AChatHeartbeat {}
@@ -33,6 +34,13 @@ message AChatChat {
   string content = 6;     // 消息内容
 }
 
+message AChatSend {
+  bool success = 1;       // 是否发送成功
+  int64 orgMsgId = 2;     // 原客户端消息ID
+  int64 newMsgId = 3;     // 新服务端消息ID
+  string error = 4;       // 错误信息
+}
+
 message AChatEnvelope {
   AChatType type = 1;     // 消息类型
   int64 timestamp = 2;    // 毫秒级时间戳
@@ -41,5 +49,6 @@ message AChatEnvelope {
     AChatHeartbeat heartbeat = 4;
     AChatAuth auth = 5;
     AChatChat chat = 6;
+    AChatSend send = 7;
   }
 }

@@ -1,0 +1,25 @@
+package cn.blazeh.achat.client.handler;
+
+import cn.blazeh.achat.client.service.MessageService;
+import cn.blazeh.achat.common.handler.AChatHandler;
+import cn.blazeh.achat.common.proto.MessageProto.*;
+import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class AChatSendHandler implements AChatHandler {
+
+    private static final Logger LOGGER = LogManager.getLogger(AChatSendHandler.class);
+
+    @Override
+    public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
+        AChatSend send = envelope.getSend();
+        if(send.getSuccess()) {
+            MessageService.getInstance().saveTempMessage(send.getOrgMsgId(), send.getNewMsgId());
+            LOGGER.info("消息发送成功");
+        } else {
+            MessageService.getInstance().removeTempMessage(send.getOrgMsgId());
+            LOGGER.warn("消息发送失败：{}", send.getError());
+        }
+    }
+}

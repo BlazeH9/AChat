@@ -19,21 +19,26 @@ public enum ChatService {
 
     private static final Logger LOGGER = LogManager.getLogger(ChatService.class);
 
-    public void processChat(Message.MessageBuilder builder) {
-        SessionManager.INSTANCE.getSession(builder.getReceiver()).ifPresentOrElse(session -> {
+    public long processChat(Message.MessageBuilder builder) {
+        return SessionManager.INSTANCE.getSession(builder.getReceiver()).map(session -> {
             Message message = builder.build();
             LOGGER.debug("接收者{}在线，立即发送消息", message.getReceiver());
-            if(sendPrivateMessage(session.getSessionId(), builder.build()))
+            if(sendPrivateMessage(session.getSessionId(), message)) {
                 LOGGER.debug("消息发送成功");
-            else
+                return message.getMessageId();
+            } else {
                 LOGGER.debug("消息发送失败");
-        }, () -> {
+                return -1L;
+            }
+        }).orElseGet(() -> {
             if(UserManager.INSTANCE.hasRegistered(builder.getReceiver())) {
                 Message message = builder.build();
                 saveMessage(message);
                 LOGGER.debug("接收者{}不在线，已暂存于服务器", message.getReceiver());
+                return message.getMessageId();
             } else {
                 LOGGER.debug("接收者{}未注册，消息已忽略", builder.getReceiver());
+                return -2L;
             }
         });
     }

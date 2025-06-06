@@ -62,6 +62,14 @@ public final class MessageProto {
      * <code>CHAT = 3;</code>
      */
     CHAT(3),
+    /**
+     * <pre>
+     * 客户端消息发送状态
+     * </pre>
+     *
+     * <code>SEND = 4;</code>
+     */
+    SEND(4),
     UNRECOGNIZED(-1),
     ;
 
@@ -106,6 +114,14 @@ public final class MessageProto {
      * <code>CHAT = 3;</code>
      */
     public static final int CHAT_VALUE = 3;
+    /**
+     * <pre>
+     * 客户端消息发送状态
+     * </pre>
+     *
+     * <code>SEND = 4;</code>
+     */
+    public static final int SEND_VALUE = 4;
 
 
     public final int getNumber() {
@@ -136,6 +152,7 @@ public final class MessageProto {
         case 1: return HEARTBEAT;
         case 2: return AUTH;
         case 3: return CHAT;
+        case 4: return SEND;
         default: return null;
       }
     }
@@ -2719,6 +2736,831 @@ public final class MessageProto {
 
   }
 
+  public interface AChatSendOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:cn.blazeh.achat.common.proto.AChatSend)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 是否发送成功
+     * </pre>
+     *
+     * <code>bool success = 1;</code>
+     * @return The success.
+     */
+    boolean getSuccess();
+
+    /**
+     * <pre>
+     * 原客户端消息ID
+     * </pre>
+     *
+     * <code>int64 orgMsgId = 2;</code>
+     * @return The orgMsgId.
+     */
+    long getOrgMsgId();
+
+    /**
+     * <pre>
+     * 新服务端消息ID
+     * </pre>
+     *
+     * <code>int64 newMsgId = 3;</code>
+     * @return The newMsgId.
+     */
+    long getNewMsgId();
+
+    /**
+     * <pre>
+     * 错误信息
+     * </pre>
+     *
+     * <code>string error = 4;</code>
+     * @return The error.
+     */
+    java.lang.String getError();
+    /**
+     * <pre>
+     * 错误信息
+     * </pre>
+     *
+     * <code>string error = 4;</code>
+     * @return The bytes for error.
+     */
+    com.google.protobuf.ByteString
+        getErrorBytes();
+  }
+  /**
+   * Protobuf type {@code cn.blazeh.achat.common.proto.AChatSend}
+   */
+  public static final class AChatSend extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:cn.blazeh.achat.common.proto.AChatSend)
+      AChatSendOrBuilder {
+  private static final long serialVersionUID = 0L;
+    static {
+      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 30,
+        /* patch= */ 2,
+        /* suffix= */ "",
+        AChatSend.class.getName());
+    }
+    // Use AChatSend.newBuilder() to construct.
+    private AChatSend(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+    }
+    private AChatSend() {
+      error_ = "";
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return cn.blazeh.achat.common.proto.MessageProto.internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return cn.blazeh.achat.common.proto.MessageProto.internal_static_cn_blazeh_achat_common_proto_AChatSend_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              cn.blazeh.achat.common.proto.MessageProto.AChatSend.class, cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder.class);
+    }
+
+    public static final int SUCCESS_FIELD_NUMBER = 1;
+    private boolean success_ = false;
+    /**
+     * <pre>
+     * 是否发送成功
+     * </pre>
+     *
+     * <code>bool success = 1;</code>
+     * @return The success.
+     */
+    @java.lang.Override
+    public boolean getSuccess() {
+      return success_;
+    }
+
+    public static final int ORGMSGID_FIELD_NUMBER = 2;
+    private long orgMsgId_ = 0L;
+    /**
+     * <pre>
+     * 原客户端消息ID
+     * </pre>
+     *
+     * <code>int64 orgMsgId = 2;</code>
+     * @return The orgMsgId.
+     */
+    @java.lang.Override
+    public long getOrgMsgId() {
+      return orgMsgId_;
+    }
+
+    public static final int NEWMSGID_FIELD_NUMBER = 3;
+    private long newMsgId_ = 0L;
+    /**
+     * <pre>
+     * 新服务端消息ID
+     * </pre>
+     *
+     * <code>int64 newMsgId = 3;</code>
+     * @return The newMsgId.
+     */
+    @java.lang.Override
+    public long getNewMsgId() {
+      return newMsgId_;
+    }
+
+    public static final int ERROR_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object error_ = "";
+    /**
+     * <pre>
+     * 错误信息
+     * </pre>
+     *
+     * <code>string error = 4;</code>
+     * @return The error.
+     */
+    @java.lang.Override
+    public java.lang.String getError() {
+      java.lang.Object ref = error_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        error_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 错误信息
+     * </pre>
+     *
+     * <code>string error = 4;</code>
+     * @return The bytes for error.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getErrorBytes() {
+      java.lang.Object ref = error_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        error_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (success_ != false) {
+        output.writeBool(1, success_);
+      }
+      if (orgMsgId_ != 0L) {
+        output.writeInt64(2, orgMsgId_);
+      }
+      if (newMsgId_ != 0L) {
+        output.writeInt64(3, newMsgId_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(error_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 4, error_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (success_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, success_);
+      }
+      if (orgMsgId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, orgMsgId_);
+      }
+      if (newMsgId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, newMsgId_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(error_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(4, error_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof cn.blazeh.achat.common.proto.MessageProto.AChatSend)) {
+        return super.equals(obj);
+      }
+      cn.blazeh.achat.common.proto.MessageProto.AChatSend other = (cn.blazeh.achat.common.proto.MessageProto.AChatSend) obj;
+
+      if (getSuccess()
+          != other.getSuccess()) return false;
+      if (getOrgMsgId()
+          != other.getOrgMsgId()) return false;
+      if (getNewMsgId()
+          != other.getNewMsgId()) return false;
+      if (!getError()
+          .equals(other.getError())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSuccess());
+      hash = (37 * hash) + ORGMSGID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getOrgMsgId());
+      hash = (37 * hash) + NEWMSGID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getNewMsgId());
+      hash = (37 * hash) + ERROR_FIELD_NUMBER;
+      hash = (53 * hash) + getError().hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(cn.blazeh.achat.common.proto.MessageProto.AChatSend prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code cn.blazeh.achat.common.proto.AChatSend}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:cn.blazeh.achat.common.proto.AChatSend)
+        cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return cn.blazeh.achat.common.proto.MessageProto.internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return cn.blazeh.achat.common.proto.MessageProto.internal_static_cn_blazeh_achat_common_proto_AChatSend_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                cn.blazeh.achat.common.proto.MessageProto.AChatSend.class, cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder.class);
+      }
+
+      // Construct using cn.blazeh.achat.common.proto.MessageProto.AChatSend.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        success_ = false;
+        orgMsgId_ = 0L;
+        newMsgId_ = 0L;
+        error_ = "";
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return cn.blazeh.achat.common.proto.MessageProto.internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor;
+      }
+
+      @java.lang.Override
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSend getDefaultInstanceForType() {
+        return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSend build() {
+        cn.blazeh.achat.common.proto.MessageProto.AChatSend result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSend buildPartial() {
+        cn.blazeh.achat.common.proto.MessageProto.AChatSend result = new cn.blazeh.achat.common.proto.MessageProto.AChatSend(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(cn.blazeh.achat.common.proto.MessageProto.AChatSend result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.success_ = success_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.orgMsgId_ = orgMsgId_;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.newMsgId_ = newMsgId_;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.error_ = error_;
+        }
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof cn.blazeh.achat.common.proto.MessageProto.AChatSend) {
+          return mergeFrom((cn.blazeh.achat.common.proto.MessageProto.AChatSend)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(cn.blazeh.achat.common.proto.MessageProto.AChatSend other) {
+        if (other == cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance()) return this;
+        if (other.getSuccess() != false) {
+          setSuccess(other.getSuccess());
+        }
+        if (other.getOrgMsgId() != 0L) {
+          setOrgMsgId(other.getOrgMsgId());
+        }
+        if (other.getNewMsgId() != 0L) {
+          setNewMsgId(other.getNewMsgId());
+        }
+        if (!other.getError().isEmpty()) {
+          error_ = other.error_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                success_ = input.readBool();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                orgMsgId_ = input.readInt64();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 24: {
+                newMsgId_ = input.readInt64();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 34: {
+                error_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private boolean success_ ;
+      /**
+       * <pre>
+       * 是否发送成功
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
+       * @return The success.
+       */
+      @java.lang.Override
+      public boolean getSuccess() {
+        return success_;
+      }
+      /**
+       * <pre>
+       * 是否发送成功
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
+       * @param value The success to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSuccess(boolean value) {
+
+        success_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 是否发送成功
+       * </pre>
+       *
+       * <code>bool success = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSuccess() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        success_ = false;
+        onChanged();
+        return this;
+      }
+
+      private long orgMsgId_ ;
+      /**
+       * <pre>
+       * 原客户端消息ID
+       * </pre>
+       *
+       * <code>int64 orgMsgId = 2;</code>
+       * @return The orgMsgId.
+       */
+      @java.lang.Override
+      public long getOrgMsgId() {
+        return orgMsgId_;
+      }
+      /**
+       * <pre>
+       * 原客户端消息ID
+       * </pre>
+       *
+       * <code>int64 orgMsgId = 2;</code>
+       * @param value The orgMsgId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOrgMsgId(long value) {
+
+        orgMsgId_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 原客户端消息ID
+       * </pre>
+       *
+       * <code>int64 orgMsgId = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOrgMsgId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        orgMsgId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long newMsgId_ ;
+      /**
+       * <pre>
+       * 新服务端消息ID
+       * </pre>
+       *
+       * <code>int64 newMsgId = 3;</code>
+       * @return The newMsgId.
+       */
+      @java.lang.Override
+      public long getNewMsgId() {
+        return newMsgId_;
+      }
+      /**
+       * <pre>
+       * 新服务端消息ID
+       * </pre>
+       *
+       * <code>int64 newMsgId = 3;</code>
+       * @param value The newMsgId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNewMsgId(long value) {
+
+        newMsgId_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 新服务端消息ID
+       * </pre>
+       *
+       * <code>int64 newMsgId = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNewMsgId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        newMsgId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object error_ = "";
+      /**
+       * <pre>
+       * 错误信息
+       * </pre>
+       *
+       * <code>string error = 4;</code>
+       * @return The error.
+       */
+      public java.lang.String getError() {
+        java.lang.Object ref = error_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          error_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 错误信息
+       * </pre>
+       *
+       * <code>string error = 4;</code>
+       * @return The bytes for error.
+       */
+      public com.google.protobuf.ByteString
+          getErrorBytes() {
+        java.lang.Object ref = error_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          error_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 错误信息
+       * </pre>
+       *
+       * <code>string error = 4;</code>
+       * @param value The error to set.
+       * @return This builder for chaining.
+       */
+      public Builder setError(
+          java.lang.String value) {
+        if (value == null) { throw new NullPointerException(); }
+        error_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 错误信息
+       * </pre>
+       *
+       * <code>string error = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearError() {
+        error_ = getDefaultInstance().getError();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 错误信息
+       * </pre>
+       *
+       * <code>string error = 4;</code>
+       * @param value The bytes for error to set.
+       * @return This builder for chaining.
+       */
+      public Builder setErrorBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        error_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:cn.blazeh.achat.common.proto.AChatSend)
+    }
+
+    // @@protoc_insertion_point(class_scope:cn.blazeh.achat.common.proto.AChatSend)
+    private static final cn.blazeh.achat.common.proto.MessageProto.AChatSend DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new cn.blazeh.achat.common.proto.MessageProto.AChatSend();
+    }
+
+    public static cn.blazeh.achat.common.proto.MessageProto.AChatSend getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<AChatSend>
+        PARSER = new com.google.protobuf.AbstractParser<AChatSend>() {
+      @java.lang.Override
+      public AChatSend parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<AChatSend> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AChatSend> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public cn.blazeh.achat.common.proto.MessageProto.AChatSend getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface AChatEnvelopeOrBuilder extends
       // @@protoc_insertion_point(interface_extends:cn.blazeh.achat.common.proto.AChatEnvelope)
       com.google.protobuf.MessageOrBuilder {
@@ -2817,6 +3659,21 @@ public final class MessageProto {
      */
     cn.blazeh.achat.common.proto.MessageProto.AChatChatOrBuilder getChatOrBuilder();
 
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     * @return Whether the send field is set.
+     */
+    boolean hasSend();
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     * @return The send.
+     */
+    cn.blazeh.achat.common.proto.MessageProto.AChatSend getSend();
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     */
+    cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder getSendOrBuilder();
+
     cn.blazeh.achat.common.proto.MessageProto.AChatEnvelope.PayloadCase getPayloadCase();
   }
   /**
@@ -2867,6 +3724,7 @@ public final class MessageProto {
       HEARTBEAT(4),
       AUTH(5),
       CHAT(6),
+      SEND(7),
       PAYLOAD_NOT_SET(0);
       private final int value;
       private PayloadCase(int value) {
@@ -2887,6 +3745,7 @@ public final class MessageProto {
           case 4: return HEARTBEAT;
           case 5: return AUTH;
           case 6: return CHAT;
+          case 7: return SEND;
           case 0: return PAYLOAD_NOT_SET;
           default: return null;
         }
@@ -3083,6 +3942,37 @@ public final class MessageProto {
       return cn.blazeh.achat.common.proto.MessageProto.AChatChat.getDefaultInstance();
     }
 
+    public static final int SEND_FIELD_NUMBER = 7;
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     * @return Whether the send field is set.
+     */
+    @java.lang.Override
+    public boolean hasSend() {
+      return payloadCase_ == 7;
+    }
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     * @return The send.
+     */
+    @java.lang.Override
+    public cn.blazeh.achat.common.proto.MessageProto.AChatSend getSend() {
+      if (payloadCase_ == 7) {
+         return (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_;
+      }
+      return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+    }
+    /**
+     * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+     */
+    @java.lang.Override
+    public cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder getSendOrBuilder() {
+      if (payloadCase_ == 7) {
+         return (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_;
+      }
+      return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -3115,6 +4005,9 @@ public final class MessageProto {
       if (payloadCase_ == 6) {
         output.writeMessage(6, (cn.blazeh.achat.common.proto.MessageProto.AChatChat) payload_);
       }
+      if (payloadCase_ == 7) {
+        output.writeMessage(7, (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -3146,6 +4039,10 @@ public final class MessageProto {
       if (payloadCase_ == 6) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, (cn.blazeh.achat.common.proto.MessageProto.AChatChat) payload_);
+      }
+      if (payloadCase_ == 7) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -3181,6 +4078,10 @@ public final class MessageProto {
           if (!getChat()
               .equals(other.getChat())) return false;
           break;
+        case 7:
+          if (!getSend()
+              .equals(other.getSend())) return false;
+          break;
         case 0:
         default:
       }
@@ -3214,6 +4115,10 @@ public final class MessageProto {
         case 6:
           hash = (37 * hash) + CHAT_FIELD_NUMBER;
           hash = (53 * hash) + getChat().hashCode();
+          break;
+        case 7:
+          hash = (37 * hash) + SEND_FIELD_NUMBER;
+          hash = (53 * hash) + getSend().hashCode();
           break;
         case 0:
         default:
@@ -3361,6 +4266,9 @@ public final class MessageProto {
         if (chatBuilder_ != null) {
           chatBuilder_.clear();
         }
+        if (sendBuilder_ != null) {
+          sendBuilder_.clear();
+        }
         payloadCase_ = 0;
         payload_ = null;
         return this;
@@ -3423,6 +4331,10 @@ public final class MessageProto {
             chatBuilder_ != null) {
           result.payload_ = chatBuilder_.build();
         }
+        if (payloadCase_ == 7 &&
+            sendBuilder_ != null) {
+          result.payload_ = sendBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -3459,6 +4371,10 @@ public final class MessageProto {
           }
           case CHAT: {
             mergeChat(other.getChat());
+            break;
+          }
+          case SEND: {
+            mergeSend(other.getSend());
             break;
           }
           case PAYLOAD_NOT_SET: {
@@ -3527,6 +4443,13 @@ public final class MessageProto {
                 payloadCase_ = 6;
                 break;
               } // case 50
+              case 58: {
+                input.readMessage(
+                    internalGetSendFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                payloadCase_ = 7;
+                break;
+              } // case 58
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -4194,6 +5117,148 @@ public final class MessageProto {
         return chatBuilder_;
       }
 
+      private com.google.protobuf.SingleFieldBuilder<
+          cn.blazeh.achat.common.proto.MessageProto.AChatSend, cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder, cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder> sendBuilder_;
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       * @return Whether the send field is set.
+       */
+      @java.lang.Override
+      public boolean hasSend() {
+        return payloadCase_ == 7;
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       * @return The send.
+       */
+      @java.lang.Override
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSend getSend() {
+        if (sendBuilder_ == null) {
+          if (payloadCase_ == 7) {
+            return (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_;
+          }
+          return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+        } else {
+          if (payloadCase_ == 7) {
+            return sendBuilder_.getMessage();
+          }
+          return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      public Builder setSend(cn.blazeh.achat.common.proto.MessageProto.AChatSend value) {
+        if (sendBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          payload_ = value;
+          onChanged();
+        } else {
+          sendBuilder_.setMessage(value);
+        }
+        payloadCase_ = 7;
+        return this;
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      public Builder setSend(
+          cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder builderForValue) {
+        if (sendBuilder_ == null) {
+          payload_ = builderForValue.build();
+          onChanged();
+        } else {
+          sendBuilder_.setMessage(builderForValue.build());
+        }
+        payloadCase_ = 7;
+        return this;
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      public Builder mergeSend(cn.blazeh.achat.common.proto.MessageProto.AChatSend value) {
+        if (sendBuilder_ == null) {
+          if (payloadCase_ == 7 &&
+              payload_ != cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance()) {
+            payload_ = cn.blazeh.achat.common.proto.MessageProto.AChatSend.newBuilder((cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            payload_ = value;
+          }
+          onChanged();
+        } else {
+          if (payloadCase_ == 7) {
+            sendBuilder_.mergeFrom(value);
+          } else {
+            sendBuilder_.setMessage(value);
+          }
+        }
+        payloadCase_ = 7;
+        return this;
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      public Builder clearSend() {
+        if (sendBuilder_ == null) {
+          if (payloadCase_ == 7) {
+            payloadCase_ = 0;
+            payload_ = null;
+            onChanged();
+          }
+        } else {
+          if (payloadCase_ == 7) {
+            payloadCase_ = 0;
+            payload_ = null;
+          }
+          sendBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder getSendBuilder() {
+        return internalGetSendFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      @java.lang.Override
+      public cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder getSendOrBuilder() {
+        if ((payloadCase_ == 7) && (sendBuilder_ != null)) {
+          return sendBuilder_.getMessageOrBuilder();
+        } else {
+          if (payloadCase_ == 7) {
+            return (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_;
+          }
+          return cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.cn.blazeh.achat.common.proto.AChatSend send = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          cn.blazeh.achat.common.proto.MessageProto.AChatSend, cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder, cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder> 
+          internalGetSendFieldBuilder() {
+        if (sendBuilder_ == null) {
+          if (!(payloadCase_ == 7)) {
+            payload_ = cn.blazeh.achat.common.proto.MessageProto.AChatSend.getDefaultInstance();
+          }
+          sendBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              cn.blazeh.achat.common.proto.MessageProto.AChatSend, cn.blazeh.achat.common.proto.MessageProto.AChatSend.Builder, cn.blazeh.achat.common.proto.MessageProto.AChatSendOrBuilder>(
+                  (cn.blazeh.achat.common.proto.MessageProto.AChatSend) payload_,
+                  getParentForChildren(),
+                  isClean());
+          payload_ = null;
+        }
+        payloadCase_ = 7;
+        onChanged();
+        return sendBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:cn.blazeh.achat.common.proto.AChatEnvelope)
     }
 
@@ -4261,6 +5326,11 @@ public final class MessageProto {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_cn_blazeh_achat_common_proto_AChatChat_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_cn_blazeh_achat_common_proto_AChatSend_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4281,18 +5351,21 @@ public final class MessageProto {
       "mestamp\030\002 \001(\003\022\020\n\010senderId\030\003 \001(\t\022\022\n\nrecei" +
       "verId\030\004 \001(\t\0227\n\004type\030\005 \001(\0162).cn.blazeh.ac" +
       "hat.common.proto.MessageType\022\017\n\007content\030" +
-      "\006 \001(\t\"\254\002\n\rAChatEnvelope\0225\n\004type\030\001 \001(\0162\'." +
-      "cn.blazeh.achat.common.proto.AChatType\022\021" +
-      "\n\ttimestamp\030\002 \001(\003\022\021\n\tsessionId\030\003 \001(\t\022A\n\t" +
-      "heartbeat\030\004 \001(\0132,.cn.blazeh.achat.common" +
-      ".proto.AChatHeartbeatH\000\0227\n\004auth\030\005 \001(\0132\'." +
-      "cn.blazeh.achat.common.proto.AChatAuthH\000" +
-      "\0227\n\004chat\030\006 \001(\0132\'.cn.blazeh.achat.common." +
-      "proto.AChatChatH\000B\t\n\007payload*=\n\tAChatTyp" +
-      "e\022\r\n\tUNDEFINED\020\000\022\r\n\tHEARTBEAT\020\001\022\010\n\004AUTH\020" +
-      "\002\022\010\n\004CHAT\020\003*\027\n\013MessageType\022\010\n\004TEXT\020\000B,\n\034" +
-      "cn.blazeh.achat.common.protoB\014MessagePro" +
-      "tob\006proto3"
+      "\006 \001(\t\"O\n\tAChatSend\022\017\n\007success\030\001 \001(\010\022\020\n\010o" +
+      "rgMsgId\030\002 \001(\003\022\020\n\010newMsgId\030\003 \001(\003\022\r\n\005error" +
+      "\030\004 \001(\t\"\345\002\n\rAChatEnvelope\0225\n\004type\030\001 \001(\0162\'" +
+      ".cn.blazeh.achat.common.proto.AChatType\022" +
+      "\021\n\ttimestamp\030\002 \001(\003\022\021\n\tsessionId\030\003 \001(\t\022A\n" +
+      "\theartbeat\030\004 \001(\0132,.cn.blazeh.achat.commo" +
+      "n.proto.AChatHeartbeatH\000\0227\n\004auth\030\005 \001(\0132\'" +
+      ".cn.blazeh.achat.common.proto.AChatAuthH" +
+      "\000\0227\n\004chat\030\006 \001(\0132\'.cn.blazeh.achat.common" +
+      ".proto.AChatChatH\000\0227\n\004send\030\007 \001(\0132\'.cn.bl" +
+      "azeh.achat.common.proto.AChatSendH\000B\t\n\007p" +
+      "ayload*G\n\tAChatType\022\r\n\tUNDEFINED\020\000\022\r\n\tHE" +
+      "ARTBEAT\020\001\022\010\n\004AUTH\020\002\022\010\n\004CHAT\020\003\022\010\n\004SEND\020\004*" +
+      "\027\n\013MessageType\022\010\n\004TEXT\020\000B,\n\034cn.blazeh.ac" +
+      "hat.common.protoB\014MessageProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -4316,12 +5389,18 @@ public final class MessageProto {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_cn_blazeh_achat_common_proto_AChatChat_descriptor,
         new java.lang.String[] { "MessageId", "Timestamp", "SenderId", "ReceiverId", "Type", "Content", });
-    internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_descriptor =
+    internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_cn_blazeh_achat_common_proto_AChatSend_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_cn_blazeh_achat_common_proto_AChatSend_descriptor,
+        new java.lang.String[] { "Success", "OrgMsgId", "NewMsgId", "Error", });
+    internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_cn_blazeh_achat_common_proto_AChatEnvelope_descriptor,
-        new java.lang.String[] { "Type", "Timestamp", "SessionId", "Heartbeat", "Auth", "Chat", "Payload", });
+        new java.lang.String[] { "Type", "Timestamp", "SessionId", "Heartbeat", "Auth", "Chat", "Send", "Payload", });
     descriptor.resolveAllFeaturesImmutable();
   }
 

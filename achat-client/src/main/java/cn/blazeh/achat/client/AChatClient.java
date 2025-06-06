@@ -18,7 +18,6 @@ public class AChatClient {
     private static final Logger LOGGER = LogManager.getLogger(AChatClient.class);
 
     private final AuthService auth = new AuthService();
-    private final ChatService chat = new ChatService();
 
     public Optional<ChannelFuture> start(String host, int port) throws Exception {
         return ConnectionManager.INSTANCE.connect(host, port);
@@ -29,7 +28,7 @@ public class AChatClient {
     }
 
     public void processInput() {
-        new InputHandler(chat, System.in).run();
+        new InputHandler(System.in).run();
     }
 
     public void authenticate(String userId, String password, boolean register) {
