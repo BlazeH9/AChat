@@ -6,6 +6,7 @@ import cn.blazeh.achat.server.dao.UserDao;
 import cn.blazeh.achat.server.handler.AChatServerHandler;
 import cn.blazeh.achat.server.manager.*;
 import cn.blazeh.achat.server.service.*;
+import cn.blazeh.achat.server.util.IdGenerator;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioIoHandler;
@@ -17,6 +18,8 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.sql.DataSource;
 
 public class AChatServer {
 
@@ -40,6 +43,7 @@ public class AChatServer {
     public void initDao() {
         messageDao = new MessageDao();
         userDao = new UserDao();
+        IdGenerator.setCounter(messageDao.getMaxId());
     }
 
     public void initManager() {

@@ -16,13 +16,17 @@ public class UserManager {
     }
 
     public boolean check(String userId, String password) {
-        return userId != null && userDao.findUser(userId)
+        return userId != null && userDao.selectUser(userId)
                 .map(user -> user.getPassword().equals(password))
                 .orElse(false);
     }
 
     public boolean add(String userId, String password) {
-        return checkUserId(userId) && userDao.checkAndInsertUser(userId, password);
+        if(!checkUserId(userId))
+            return false;
+        return userDao.selectUser(userId)
+                .map(ignored -> false)
+                .orElseGet(() -> userDao.insertUser(new User(userId, password)));
     }
 
     public boolean checkUserId(String userId) {
@@ -32,17 +36,15 @@ public class UserManager {
     }
 
     public boolean hasRegistered(String userId) {
-        return userDao.findUser(userId).isPresent();
+        return userDao.selectUser(userId).isPresent();
     }
 
     public Optional<User> findUser(String userId) {
-        return userDao.findUser(userId);
+        return userDao.selectUser(userId);
     }
 
     public void save(User user) {
-        if(user == null)
-            return;
-        userDao.updateUser(user);
+
     }
 
 }

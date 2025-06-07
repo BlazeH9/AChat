@@ -10,4 +10,8 @@ public final class IdGenerator {
         return COUNTER.incrementAndGet();
     }
 
+    public static void setCounter(long counter) {
+        COUNTER.set(counter);
+    }
+
 }

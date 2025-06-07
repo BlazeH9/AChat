@@ -1,41 +1,65 @@
 package cn.blazeh.achat.server.dao;
 
+import cn.blazeh.achat.server.manager.DatabaseManager;
 import cn.blazeh.achat.server.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class UserDao {
 
-    private final Map<String, User> users = new ConcurrentHashMap<>();
+    private static final Logger LOGGER = LogManager.getLogger(UserDao.class);
 
-    public UserDao() {
-        users.put("test1", new User("test1", "123456"));
-        users.put("test2", new User("test2", "88888888"));
+    private static final String INSERT_SQL = "INSERT INTO user (user_id, password) VALUES (?, ?)";
+    private static final String SELECT_SQL = "SELECT * FROM user WHERE user_id = ?";
+    private static final String UPDATE_SQL = "UPDATE user SET password = ? WHERE user_id = ?";
+
+    private Connection getConnection() {
+        return DatabaseManager.INSTANCE.getConnection();
     }
 
-    public Optional<User> findUser(String userId) {
-        return Optional.ofNullable(users.get(userId));
-    }
-
-    public void insertUser(User user) {
-        users.put(user.getUserId(), user);
-    }
-
-    public void insertUser(String userId, String password) {
-        insertUser(new User(userId, password));
-    }
-
-    public boolean checkAndInsertUser(String userId, String password) {
-        if(users.containsKey(userId))
+    public boolean insertUser(User user) {
+        try(Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(INSERT_SQL)) {
+            ps.setString(1, user.getUserId());
+            ps.setString(2, user.getPassword());
+            return ps.executeUpdate() > 0;
+        } catch(SQLException e) {
+            LOGGER.error("存储用户{}的数据时出现异常", user.getUserId(), e);
             return false;
-        insertUser(userId, password);
-        return true;
+        }
     }
 
-    public void updateUser(User user) {
-        users.put(user.getUserId(), user);
+    public Optional<User> selectUser(String userId) {
+        try(Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_SQL)) {
+            ps.setString(1, userId);
+            try(ResultSet rs = ps.executeQuery()) {
+                if(rs.next())
+                    return Optional.of(new User(rs.getString("user_id"), rs.getString("password")));
+            }
+            return Optional.empty();
+        } catch(SQLException e) {
+            LOGGER.error("查询用户{}的数据时出现异常", userId, e);
+            return Optional.empty();
+        }
+    }
+
+    public boolean updateUser(User user) {
+        try(Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement(UPDATE_SQL)) {
+            ps.setString(1, user.getPassword());
+            ps.setString(2, user.getUserId());
+            return ps.executeUpdate() > 0;
+        } catch(SQLException e) {
+            LOGGER.error("更新用户{}的数据时出现异常", user.getUserId(), e);
+            return false;
+        }
     }
 
 }
