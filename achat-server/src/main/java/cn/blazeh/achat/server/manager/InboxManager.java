@@ -1,15 +1,12 @@
-package cn.blazeh.achat.server.service;
+package cn.blazeh.achat.server.manager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-public enum InboxService {
-
-    INSTANCE;
+public class InboxManager {
 
     private final Map<String, Set<Long>> messages = new ConcurrentHashMap<>();
-
 
     public void addMessage(String receiver, long messageId) {
         messages.computeIfAbsent(receiver, ignored -> new ConcurrentSkipListSet<>()).add(messageId);

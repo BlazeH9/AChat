@@ -16,10 +16,18 @@ public class AChatChatHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatChatHandler.class);
 
+    private final ChatService chatService;
+    private final UserService userService;
+
+    public AChatChatHandler(ChatService chatService, UserService userService) {
+        this.chatService = chatService;
+        this.userService = userService;
+    }
+
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
         UUID sessionId = UUID.fromString(envelope.getSessionId());
-        UserService.INSTANCE.getUserId(sessionId).ifPresent(senderId -> {
+        userService.getUserId(sessionId).ifPresent(senderId -> {
             AChatChat chat = envelope.getChat();
             String receiverId = chat.getReceiverId();
             LOGGER.debug("收到客户端消息：{} -> {} : {}", senderId, receiverId, chat.getContent());
@@ -29,7 +37,7 @@ public class AChatChatHandler implements AChatHandler {
                     .setSender(senderId)
                     .setReceiver(receiverId)
                     .setContent(chat.getContent());
-            long messageId = ChatService.INSTANCE.processChat(builder);
+            long messageId = chatService.processChat(builder);
             if(messageId >= 0) {
                 ctx.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.SEND)

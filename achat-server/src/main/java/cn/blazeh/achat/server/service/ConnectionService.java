@@ -4,30 +4,56 @@ import cn.blazeh.achat.server.manager.ChannelManager;
 import cn.blazeh.achat.server.manager.SessionManager;
 import io.netty.channel.Channel;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public enum ConnectionService {
+public class ConnectionService {
 
-    INSTANCE;
+    private final ChannelManager channelManager;
+    private final SessionManager sessionManager;
+
+    public ConnectionService(ChannelManager channelManager, SessionManager sessionManager) {
+        this.channelManager = channelManager;
+        this.sessionManager = sessionManager;
+    }
 
     public UUID establish(String userId, Channel channel) {
-        UUID sessionId = SessionManager.INSTANCE.addSession(userId);
-        ChannelManager.INSTANCE.combine(sessionId, channel);
-        UserService.INSTANCE.login(userId);
+        UUID sessionId = sessionManager.addSession(userId);
+        channelManager.combine(sessionId, channel);
         return sessionId;
     }
 
     public void terminate(String userId) {
-        SessionManager.INSTANCE.removeSession(userId)
-                .ifPresent(session -> {
-                    UserService.INSTANCE.logout(userId);
-                    ChannelManager.INSTANCE.separate(session.getSessionId());
-                });
+        sessionManager.removeSession(userId)
+                .ifPresent(session -> channelManager.separate(session.getSessionId()));
     }
 
     public void terminate(Channel channel) {
-        ChannelManager.INSTANCE.separate(channel)
-                .flatMap(SessionManager.INSTANCE::removeSession)
-                .ifPresent(session -> UserService.INSTANCE.logout(session.getUserId()));
+        channelManager.separate(channel).ifPresent(sessionManager::removeSession);
     }
+
+    public Optional<String> getUserId(UUID sessionId) {
+        return sessionManager.getUserId(sessionId);
+    }
+
+    public Optional<String> getUserId(Channel channel) {
+        return getSessionId(channel).flatMap(this::getUserId);
+    }
+
+    public Optional<UUID> getSessionId(Channel channel) {
+        return channelManager.getSessionId(channel);
+    }
+
+    public Optional<UUID> getSessionId(String userId) {
+        return sessionManager.getSessionId(userId);
+    }
+
+    public Optional<Channel> getChannel(UUID sessionId) {
+        return channelManager.getChannel(sessionId);
+    }
+
+    public Optional<Channel> getChannel(String userId) {
+        return sessionManager.getSessionId(userId).flatMap(this::getChannel);
+    }
+
 }

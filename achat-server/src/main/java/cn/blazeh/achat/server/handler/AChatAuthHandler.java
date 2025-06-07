@@ -2,7 +2,7 @@ package cn.blazeh.achat.server.handler;
 
 import cn.blazeh.achat.common.handler.AChatHandler;
 import cn.blazeh.achat.common.proto.MessageProto.*;
-import cn.blazeh.achat.server.service.AuthService;
+import cn.blazeh.achat.server.service.ChatService;
 import cn.blazeh.achat.server.service.ConnectionService;
 import cn.blazeh.achat.server.service.UserService;
 import io.netty.channel.Channel;
@@ -14,6 +14,16 @@ public class AChatAuthHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatAuthHandler.class);
 
+    private final ChatService chatService;
+    private final ConnectionService connectionService;
+    private final UserService userService;
+
+    public AChatAuthHandler(ChatService chatService, ConnectionService connectionService, UserService userService) {
+        this.chatService = chatService;
+        this.connectionService = connectionService;
+        this.userService = userService;
+    }
+
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
         LOGGER.debug("接收到验证请求：{}", ctx.channel().remoteAddress());
@@ -21,8 +31,8 @@ public class AChatAuthHandler implements AChatHandler {
         Channel channel = ctx.channel();
         String userId = auth.getFirst(), password = auth.getSecond();
         if(auth.getFlag()) {
-            if(AuthService.INSTANCE.registerAuth(userId, password)) {
-                String sessionId = ConnectionService.INSTANCE.establish(userId, channel).toString();
+            if(userService.register(userId, password)) {
+                String sessionId = connectionService.establish(userId, channel).toString();
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)
                         .setAuth(AChatAuth.newBuilder()
@@ -31,7 +41,6 @@ public class AChatAuthHandler implements AChatHandler {
                                 .setSecond(sessionId)
                         )
                 );
-                UserService.INSTANCE.flushInbox(userId);
             } else {
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)
@@ -44,8 +53,8 @@ public class AChatAuthHandler implements AChatHandler {
                 );
             }
         } else {
-            if(AuthService.INSTANCE.loginAuth(userId, password)) {
-                String sessionId = ConnectionService.INSTANCE.establish(userId, channel).toString();
+            if(userService.login(userId, password)) {
+                String sessionId = connectionService.establish(userId, channel).toString();
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)
                         .setAuth(AChatAuth.newBuilder()
@@ -54,7 +63,7 @@ public class AChatAuthHandler implements AChatHandler {
                                 .setSecond(sessionId)
                         )
                 );
-                UserService.INSTANCE.flushInbox(userId);
+                userService.flushInbox(userId, message -> chatService.sendPrivateMessage(channel, message));
             } else {
                 channel.writeAndFlush(AChatServerHandler.getEnvelopeBuilder()
                         .setType(AChatType.AUTH)

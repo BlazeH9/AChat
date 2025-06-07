@@ -8,14 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageDao {
 
-    public static final Map<Long, Message> MESSAGES = new ConcurrentHashMap<>();
+    public final Map<Long, Message> messages = new ConcurrentHashMap<>();
 
-    public static void insertMessage(Message message) {
-        MESSAGES.put(message.getMessageId(), message);
+    public void insertMessage(Message message) {
+        messages.put(message.getMessageId(), message);
     }
 
-    public static Optional<Message> selectMessage(long id) {
-        return Optional.ofNullable(MESSAGES.get(id));
+    public Optional<Message> selectMessage(long id) {
+        return Optional.ofNullable(messages.get(id));
     }
 
 }

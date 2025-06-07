@@ -5,16 +5,20 @@ import cn.blazeh.achat.server.dao.MessageDao;
 
 import java.util.Optional;
 
-public enum MessageManager {
+public class MessageManager {
 
-    INSTANCE;
+    private final MessageDao messageDao;
 
-    public void addMessage(Message message) {
-        MessageDao.insertMessage(message);
+    public MessageManager(MessageDao messageDao) {
+        this.messageDao = messageDao;
+    }
+
+    public void saveMessage(Message message) {
+        messageDao.insertMessage(message);
     }
 
     public Optional<Message> getMessage(long id) {
-        return MessageDao.selectMessage(id);
+        return messageDao.selectMessage(id);
     }
 
 }

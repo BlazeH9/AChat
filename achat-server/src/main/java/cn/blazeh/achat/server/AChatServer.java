@@ -1,7 +1,11 @@
 package cn.blazeh.achat.server;
 
 import cn.blazeh.achat.common.proto.MessageProto.AChatEnvelope;
+import cn.blazeh.achat.server.dao.MessageDao;
+import cn.blazeh.achat.server.dao.UserDao;
 import cn.blazeh.achat.server.handler.AChatServerHandler;
+import cn.blazeh.achat.server.manager.*;
+import cn.blazeh.achat.server.service.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioIoHandler;
@@ -17,9 +21,43 @@ import org.apache.logging.log4j.Logger;
 public class AChatServer {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatServer.class);
-    public static final int PORT = 8080;
+    private static final int PORT = 8080;
 
-    public static void main(String[] args) throws Exception {
+    private MessageDao messageDao;
+    private UserDao userDao;
+
+    private ChannelManager channelManager;
+    private InboxManager inboxManager;
+    private MessageManager messageManager;
+    private SessionManager sessionManager;
+    private UserManager userManager;
+
+    private AuthService authService;
+    private ChatService chatService;
+    private ConnectionService connectionService;
+    private UserService userService;
+
+    public void initDao() {
+        messageDao = new MessageDao();
+        userDao = new UserDao();
+    }
+
+    public void initManager() {
+        channelManager = new ChannelManager();
+        inboxManager = new InboxManager();
+        messageManager = new MessageManager(messageDao);
+        sessionManager = new SessionManager();
+        userManager = new UserManager(userDao);
+    }
+
+    public void initService() {
+        connectionService = new ConnectionService(channelManager, sessionManager);
+        authService = new AuthService(userManager, sessionManager);
+        chatService = new ChatService(connectionService, inboxManager, messageManager, userManager);
+        userService = new UserService(inboxManager, userManager, sessionManager, messageManager);
+    }
+
+    public void start() throws Exception {
         EventLoopGroup bossGroup = new MultiThreadIoEventLoopGroup(1, NioIoHandler.newFactory());
         EventLoopGroup workerGroup = new MultiThreadIoEventLoopGroup(0, NioIoHandler.newFactory());
 
@@ -36,7 +74,7 @@ public class AChatServer {
                                     .addLast(new ProtobufDecoder(AChatEnvelope.getDefaultInstance()))
                                     .addLast(new ProtobufVarint32LengthFieldPrepender())
                                     .addLast(new ProtobufEncoder())
-                                    .addLast(new AChatServerHandler());
+                                    .addLast(new AChatServerHandler(authService, chatService, connectionService, userService));
                         }
                     });
             ChannelFuture future = bootstrap.bind(PORT).sync();
@@ -46,5 +84,13 @@ public class AChatServer {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        AChatServer server = new AChatServer();
+        server.initDao();
+        server.initManager();
+        server.initService();
+        server.start();
     }
 }

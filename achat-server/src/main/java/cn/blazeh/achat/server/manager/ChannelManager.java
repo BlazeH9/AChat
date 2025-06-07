@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum ChannelManager {
-
-    INSTANCE;
+public class ChannelManager {
 
     public static final AttributeKey<UUID> SESSION_ID = AttributeKey.valueOf("sessionId");
 

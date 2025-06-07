@@ -7,9 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum SessionManager {
-
-    INSTANCE;
+public class SessionManager {
 
     private final Map<UUID, UserSession> sessions = new ConcurrentHashMap<>();
     private final Map<String, UUID> ids = new ConcurrentHashMap<>();

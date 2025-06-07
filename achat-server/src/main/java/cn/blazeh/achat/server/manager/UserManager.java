@@ -6,20 +6,23 @@ import cn.blazeh.achat.server.model.User;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public enum UserManager {
-
-    INSTANCE;
+public class UserManager {
 
     private static final Pattern USER_ID_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,16}$");
+    private final UserDao userDao;
+
+    public UserManager(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public boolean check(String userId, String password) {
-        return userId != null && UserDao.findUser(userId)
+        return userId != null && userDao.findUser(userId)
                 .map(user -> user.getPassword().equals(password))
                 .orElse(false);
     }
 
     public boolean add(String userId, String password) {
-        return checkUserId(userId) && UserDao.checkAndInsertUser(userId, password);
+        return checkUserId(userId) && userDao.checkAndInsertUser(userId, password);
     }
 
     public boolean checkUserId(String userId) {
@@ -29,17 +32,17 @@ public enum UserManager {
     }
 
     public boolean hasRegistered(String userId) {
-        return UserDao.findUser(userId).isPresent();
+        return userDao.findUser(userId).isPresent();
     }
 
     public Optional<User> findUser(String userId) {
-        return UserDao.findUser(userId);
+        return userDao.findUser(userId);
     }
 
     public void save(User user) {
         if(user == null)
             return;
-        UserDao.updateUser(user);
+        userDao.updateUser(user);
     }
 
 }

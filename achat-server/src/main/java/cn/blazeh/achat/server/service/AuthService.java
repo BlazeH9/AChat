@@ -5,16 +5,22 @@ import cn.blazeh.achat.server.manager.UserManager;
 
 import java.util.UUID;
 
-public enum AuthService {
+public class AuthService {
 
-    INSTANCE;
+    private final UserManager userManager;
+    private final SessionManager sessionManager;
+
+    public AuthService(UserManager userManager, SessionManager sessionManager) {
+        this.userManager = userManager;
+        this.sessionManager = sessionManager;
+    }
 
     public boolean loginAuth(String userId, String password) {
-        return UserManager.INSTANCE.check(userId, password);
+        return userManager.check(userId, password);
     }
 
     public boolean registerAuth(String userId, String password) {
-        return UserManager.INSTANCE.add(userId, password);
+        return userManager.add(userId, password);
     }
 
     public boolean sessionAuth(String sessionId) {
@@ -22,7 +28,7 @@ public enum AuthService {
     }
 
     public boolean sessionAuth(UUID sessionId) {
-        return SessionManager.INSTANCE.containsSession(sessionId);
+        return sessionManager.containsSession(sessionId);
     }
 
 }
