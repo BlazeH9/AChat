@@ -4,10 +4,13 @@ import cn.blazeh.achat.server.dao.UserDao;
 import cn.blazeh.achat.server.model.User;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public enum UserManager {
 
     INSTANCE;
+
+    private static final Pattern USER_ID_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,16}$");
 
     public boolean check(String userId, String password) {
         return userId != null && UserDao.findUser(userId)
@@ -20,7 +23,9 @@ public enum UserManager {
     }
 
     public boolean checkUserId(String userId) {
-        return userId != null && !userId.isEmpty();
+        if(userId == null || userId.isEmpty())
+            return false;
+        return USER_ID_PATTERN.matcher(userId).matches();
     }
 
     public boolean hasRegistered(String userId) {
