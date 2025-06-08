@@ -98,4 +98,8 @@ public enum MessageManager {
         );
     }
 
+    public List<String> getContacts() {
+        return readOperation(dao::getContacts, List.of(), "获取联系人列表时出现异常");
+    }
+
 }

@@ -35,6 +35,8 @@ public class MessageDao {
     private static final String SELECT_LATEST_MESSAGE_ID_SQL =
             "SELECT MAX(message_id) FROM messages";
 
+    private static final String SELECT_CONTACTS_SQL = "SELECT sender FROM messages UNION SELECT receiver FROM messages;";
+
     private Connection getConnection() {
         return DatabaseManager.INSTANCE.getConnection();
     }
@@ -115,13 +117,25 @@ public class MessageDao {
     }
 
     public long getLatestMessageId() throws SQLException {
-        try (Statement ps = getConnection().createStatement();
+        try(Statement ps = getConnection().createStatement();
              ResultSet rs = ps.executeQuery(SELECT_LATEST_MESSAGE_ID_SQL)) {
             if(rs.next()) {
                 return rs.getLong(1);
             }
         }
         return 0;
+    }
+
+    public List<String> getContacts() throws SQLException {
+        List<String> contacts = new ArrayList<>();
+        try(PreparedStatement ps = getConnection().prepareStatement(SELECT_CONTACTS_SQL)) {
+            try(ResultSet rs = ps.executeQuery()) {
+                while(rs.next()) {
+                    contacts.add(rs.getString(1));
+                }
+            }
+        }
+        return contacts;
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.blazeh.achat.client.manager;
 
+import cn.blazeh.achat.client.AChatClient;
 import cn.blazeh.achat.client.handler.AChatClientHandler;
 import cn.blazeh.achat.client.model.Session;
 import cn.blazeh.achat.common.proto.MessageProto.AChatEnvelope;
@@ -27,7 +28,7 @@ public enum ConnectionManager {
     private final EventLoopGroup group = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
-    public Optional<ChannelFuture> connect(String host, int port) throws InterruptedException {
+    public Optional<ChannelFuture> connect(AChatClient client, String host, int port) throws InterruptedException {
         if(isConnected())
             return Optional.empty();
         Bootstrap bootstrap = new Bootstrap();
@@ -42,7 +43,7 @@ public enum ConnectionManager {
                                 .addLast(new ProtobufDecoder(AChatEnvelope.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
-                                .addLast(new AChatClientHandler());
+                                .addLast(new AChatClientHandler(client));
                     }
                 });
         ChannelFuture future = bootstrap.connect(host, port).sync();

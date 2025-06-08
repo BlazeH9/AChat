@@ -21,6 +21,7 @@ public class ChatService extends ClientService {
 
     public void receive(Message message) {
         LOGGER.info("[{}]<{}> {}", MessageService.parseTimestamp(message.getTimestamp()), message.getSender(), message.getContent());
+
         MessageManager.INSTANCE.saveMessage(message);
     }
 
