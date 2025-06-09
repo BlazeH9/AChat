@@ -242,12 +242,12 @@ public class ChatFrame extends BaseFrame {
         LOGGER.debug("聊天区域创建完成");
 
         // 添加滚动监听器
-        chatScroll.getVerticalScrollBar().addAdjustmentListener(e -> SwingUtilities.invokeLater(() -> {
+        chatScroll.getVerticalScrollBar().addAdjustmentListener(e -> {
             JScrollBar scrollBar = (JScrollBar) e.getSource();
             if (scrollBar.getValue() == 0 && !e.getValueIsAdjusting() && !isLoading.get()) {
                 loadMoreMessages();
             }
-        }));
+        });
 
         // 输入区域
         JPanel inputPanel = createInputPanel();
@@ -410,6 +410,7 @@ public class ChatFrame extends BaseFrame {
                     userId, contact, MESSAGE_LIMIT, currentOffset);
             if (messages.isEmpty())
                 return;
+
             messages.sort(Comparator.comparing(Message::getTimestamp)
                     .thenComparing(Message::getMessageId));
 
@@ -422,8 +423,9 @@ public class ChatFrame extends BaseFrame {
             chatArea.setText(sb.toString());
 
             SwingUtilities.invokeLater(() -> {
-                chatArea.setCaretPosition(chatArea.getDocument().getLength());
-                LOGGER.info("已显示与{}的聊天，滚动条：{}", contact, chatScroll.getVerticalScrollBar().getValue());
+                JScrollBar verticalScrollBar = chatScroll.getVerticalScrollBar();
+                verticalScrollBar.setValue(verticalScrollBar.getMaximum());
+                LOGGER.info("已显示与{}的聊天，滚动条：{}", contact, verticalScrollBar.getValue());
             });
         } finally {
             isLoading.set(false);
@@ -434,41 +436,50 @@ public class ChatFrame extends BaseFrame {
      * 加载更多历史消息
      */
     private void loadMoreMessages() {
-        if (currentContact == null || isLoading.get()) {
-            return;
-        }
-        LOGGER.info("开始加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
-        isLoading.set(true);
-        try {
-            List<Message> moreMessages = MessageManager.INSTANCE.getConversationMessages(
-                    userId, currentContact, MESSAGE_LIMIT, currentOffset);
-            if (moreMessages.isEmpty())
+        SwingUtilities.invokeLater(() -> {
+            if (currentContact == null || isLoading.get()) {
                 return;
-            moreMessages.sort(Comparator.comparing(Message::getTimestamp)
-                    .thenComparing(Message::getMessageId));
-            moreMessages.removeIf(msg -> msg.getMessageId() >= lastDisplayedMessageId);
+            }
+            LOGGER.info("开始加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
+            isLoading.set(true);
 
-            if (moreMessages.isEmpty())
-                return;
-            int scrollPos = chatScroll.getVerticalScrollBar().getValue();
+            try {
+                List<Message> moreMessages = MessageManager.INSTANCE.getConversationMessages(
+                        userId, currentContact, MESSAGE_LIMIT, currentOffset);
+                if (moreMessages.isEmpty())
+                    return;
 
-            StringBuilder sb = new StringBuilder();
-            for (Message msg : moreMessages)
-                sb.append(formatMessage(msg)).append("\n");
-            String newMessages = sb.toString();
+                moreMessages.sort(Comparator.comparing(Message::getTimestamp)
+                        .thenComparing(Message::getMessageId));
+                moreMessages.removeIf(msg -> msg.getMessageId() >= lastDisplayedMessageId);
 
-            chatArea.insert(newMessages, 0);
-            currentOffset += moreMessages.size();
+                if (moreMessages.isEmpty())
+                    return;
 
-            FontMetrics fm = chatArea.getFontMetrics(chatArea.getFont());
-            int lineCount = countLines(newMessages);
-            int addedHeight = lineCount * fm.getHeight();
+                JScrollBar verticalScrollBar = chatScroll.getVerticalScrollBar();
+                int oldScrollValue = verticalScrollBar.getValue();
+                int oldMaximum = verticalScrollBar.getMaximum();
 
-            chatScroll.getVerticalScrollBar().setValue(scrollPos + addedHeight);
-            LOGGER.info("已加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
-        } finally {
-            isLoading.set(false);
-        }
+                StringBuilder sb = new StringBuilder();
+                for (Message msg : moreMessages)
+                    sb.append(formatMessage(msg)).append("\n");
+                String newMessages = sb.toString();
+
+                chatArea.insert(newMessages, 0);
+                currentOffset += moreMessages.size();
+
+                SwingUtilities.invokeLater(() -> {
+                    int newMaximum = verticalScrollBar.getMaximum();
+                    int heightIncrease = newMaximum - oldMaximum;
+
+                    verticalScrollBar.setValue(oldScrollValue + heightIncrease);
+                    LOGGER.info("已加载更多聊天记录，滚动条：{}", verticalScrollBar.getValue());
+                });
+
+            } finally {
+                isLoading.set(false);
+            }
+        });
     }
 
     /**
@@ -524,7 +535,7 @@ public class ChatFrame extends BaseFrame {
             chatArea.append(formatMessage(message) + "\n");
             if(chatArea.getCaretPosition() - pos < 10)
                 SwingUtilities.invokeLater(() -> chatArea.setCaretPosition(chatArea.getDocument().getLength()));
-            if (message.getMessageId() > lastDisplayedMessageId)
+            if(message.getMessageId() > lastDisplayedMessageId)
                 lastDisplayedMessageId = message.getMessageId();
         }
     }

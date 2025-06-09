@@ -23,7 +23,7 @@ public class AChatClientHandler extends SimpleChannelInboundHandler<AChatEnvelop
         this.client = client;
         handlers = new AChatHandler[] {
                 new AChatUndefinedHandler(), new AChatUndefinedHandler(),
-                new AChatAuthHandler(client), new AChatChatHandler(client), new AChatSendHandler()
+                new AChatAuthHandler(client), new AChatChatHandler(client), new AChatSendHandler(client)
         };
     }
 

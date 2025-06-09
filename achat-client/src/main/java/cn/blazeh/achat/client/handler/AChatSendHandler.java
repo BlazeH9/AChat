@@ -1,5 +1,6 @@
 package cn.blazeh.achat.client.handler;
 
+import cn.blazeh.achat.client.AChatClient;
 import cn.blazeh.achat.client.service.MessageService;
 import cn.blazeh.achat.common.handler.AChatHandler;
 import cn.blazeh.achat.common.proto.MessageProto.*;
@@ -14,6 +15,12 @@ public class AChatSendHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatSendHandler.class);
 
+    private final AChatClient client;
+
+    public AChatSendHandler(AChatClient client) {
+        this.client = client;
+    }
+
     @Override
     public void handle(ChannelHandlerContext ctx, AChatEnvelope envelope) {
         AChatSend send = envelope.getSend();
@@ -22,6 +29,7 @@ public class AChatSendHandler implements AChatHandler {
             LOGGER.info("消息发送成功");
         } else {
             MessageService.getInstance().removeTempMessage(send.getOrgMsgId());
+            client.getChatFrame().showWarnMessage("消息发送失败："+send.getError());
             LOGGER.warn("消息发送失败：{}", send.getError());
         }
     }

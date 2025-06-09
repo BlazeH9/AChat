@@ -91,7 +91,7 @@ public class BaseFrame extends JFrame {
      * 显示警告提示框
      * @param message 提示消息内容
      */
-    protected void showWarnMessage(String message) {
+    public void showWarnMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "提示", JOptionPane.WARNING_MESSAGE);
     }
 
@@ -100,7 +100,7 @@ public class BaseFrame extends JFrame {
      * @param message 提示消息内容
      * @param title 提示框标题
      */
-    protected void showInfoMessage(String message, String title) {
+    public void showInfoMessage(String message, String title) {
         JOptionPane.showMessageDialog(this, message, "成功", JOptionPane.INFORMATION_MESSAGE);
     }
 
