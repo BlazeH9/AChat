@@ -4,6 +4,8 @@ import cn.blazeh.achat.client.manager.MessageManager;
 import cn.blazeh.achat.client.service.ChatService;
 import cn.blazeh.achat.client.service.MessageService;
 import cn.blazeh.achat.common.model.Message;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,14 +20,10 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ChatFrame extends JFrame {
+public class ChatFrame extends BaseFrame {
 
+    private static final Logger LOGGER = LogManager.getLogger(ChatFrame.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final Color PRIMARY_COLOR = new Color(64, 128, 255);
-    private static final Color SECONDARY_COLOR = new Color(245, 247, 250);
-    private static final Color ACCENT_COLOR = new Color(40, 167, 69);
-    private static final Color HOVER_COLOR = new Color(230, 240, 255);
-    private static final Color TEXT_COLOR = new Color(51, 51, 51);
 
     private final String userId;
     private final DefaultListModel<String> contactListModel = new DefaultListModel<>();
@@ -40,10 +38,10 @@ public class ChatFrame extends JFrame {
     private final AtomicBoolean isLoading = new AtomicBoolean(false);
     private JScrollPane chatScroll;
 
-    // 添加消息ID追踪，确保不重复显示消息
     private long lastDisplayedMessageId = 0;
 
-    public ChatFrame(String userId) {
+    public ChatFrame(String userId, Runnable onClose) {
+        super(onClose);
         this.userId = userId;
 
         setTitle("AChat - 欢迎 " + userId);
@@ -53,7 +51,11 @@ public class ChatFrame extends JFrame {
         setMinimumSize(new Dimension(800, 600));
 
         initContacts();
+        LOGGER.info("联系人列表拉取完成");
+
         initUI();
+        LOGGER.info("页面初始化完成");
+
         applyModernStyling();
     }
 
@@ -68,26 +70,27 @@ public class ChatFrame extends JFrame {
     private void initUI() {
         setLayout(new BorderLayout());
 
-        // 创建主面板
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
+        LOGGER.info("主面板创建完成");
 
-        // 左侧面板
         JPanel leftPanel = createLeftPanel();
+        LOGGER.info("左侧板创建完成");
 
-        // 右侧聊天面板
         JPanel rightPanel = createRightPanel();
+        LOGGER.info("右侧板创建完成");
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(250);
         splitPane.setDividerSize(1);
         splitPane.setBorder(null);
         splitPane.setOpaque(false);
+        LOGGER.info("分割线创建完成");
 
         mainPanel.add(splitPane, BorderLayout.CENTER);
         add(mainPanel);
 
-        if (!contactListModel.isEmpty()) {
+        if(!contactListModel.isEmpty()) {
             contactList.setSelectedIndex(0);
         }
     }
@@ -107,12 +110,11 @@ public class ChatFrame extends JFrame {
         userLabel.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
         userLabel.setForeground(TEXT_COLOR);
 
-        JButton addContactBtn = createStyledButton("+ 添加联系人", ACCENT_COLOR);
-        addContactBtn.setPreferredSize(new Dimension(120, 30));
-        addContactBtn.addActionListener(this::showAddContactDialog);
+        JButton addContactBtn = createStyledButton("+ 添加联系人", ACCENT_COLOR, new Dimension(120, 30), this::showAddContactDialog);
 
         topPanel.add(userLabel, BorderLayout.CENTER);
         topPanel.add(addContactBtn, BorderLayout.EAST);
+        LOGGER.debug("顶部按钮创建完成");
 
         // 联系人列表
         setupContactList();
@@ -126,6 +128,7 @@ public class ChatFrame extends JFrame {
         ));
         contactScroll.setBackground(Color.WHITE);
         contactScroll.getViewport().setBackground(Color.WHITE);
+        LOGGER.debug("联系人列表创建完成");
 
         leftPanel.add(topPanel, BorderLayout.NORTH);
         leftPanel.add(contactScroll, BorderLayout.CENTER);
@@ -196,6 +199,7 @@ public class ChatFrame extends JFrame {
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.setBackground(Color.WHITE);
         statusPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
+        LOGGER.debug("顶部状态栏创建完成");
 
         statusLabel.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
         statusLabel.setForeground(TEXT_COLOR);
@@ -213,6 +217,7 @@ public class ChatFrame extends JFrame {
         ));
         chatScroll.setBackground(Color.WHITE);
         chatScroll.getViewport().setBackground(Color.WHITE);
+        LOGGER.debug("聊天区域创建完成");
 
         // 添加滚动监听器
         chatScroll.getVerticalScrollBar().addAdjustmentListener(e -> SwingUtilities.invokeLater(() -> {
@@ -224,10 +229,12 @@ public class ChatFrame extends JFrame {
 
         // 输入区域
         JPanel inputPanel = createInputPanel();
+        LOGGER.debug("输入区域板创建完成");
 
         rightPanel.add(statusPanel, BorderLayout.NORTH);
         rightPanel.add(chatScroll, BorderLayout.CENTER);
         rightPanel.add(inputPanel, BorderLayout.SOUTH);
+        
 
         return rightPanel;
     }
@@ -257,50 +264,12 @@ public class ChatFrame extends JFrame {
         inputField.addActionListener(this::sendMessage);
 
         // 发送按钮
-        JButton sendButton = createStyledButton("发送消息", PRIMARY_COLOR);
-        sendButton.setPreferredSize(new Dimension(100, 35));
-        sendButton.addActionListener(this::sendMessage);
+        JButton sendButton = createStyledButton("发送消息", PRIMARY_COLOR, new Dimension(100, 35), this::sendMessage);
 
         inputPanel.add(inputField, BorderLayout.CENTER);
         inputPanel.add(sendButton, BorderLayout.EAST);
 
         return inputPanel;
-    }
-
-    private JButton createStyledButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 11));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorder(new LineBorder(bgColor, 1, true));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // 添加悬停效果
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.darker());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
-
-        button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
-
-        return button;
-    }
-
-    private void applyModernStyling() {
-        // 设置整体字体
-        Font defaultFont = new Font("Microsoft YaHei UI", Font.PLAIN, 12);
-        UIManager.put("Label.font", defaultFont);
-        UIManager.put("Button.font", defaultFont);
-        UIManager.put("TextField.font", defaultFont);
-        UIManager.put("TextArea.font", defaultFont);
     }
 
     private void showAddContactDialog(ActionEvent e) {
@@ -343,34 +312,25 @@ public class ChatFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
         buttonPanel.setBackground(Color.WHITE);
 
-        JButton cancelBtn = createStyledButton("取消", new Color(108, 117, 125));
-        cancelBtn.setPreferredSize(new Dimension(80, 32));
-        cancelBtn.addActionListener(evt -> dialog.dispose());
-
-        JButton confirmBtn = createStyledButton("确定", ACCENT_COLOR);
-        confirmBtn.setPreferredSize(new Dimension(80, 32));
-        confirmBtn.addActionListener(evt -> {
+        JButton cancelBtn = createStyledButton("取消", new Color(108, 117, 125), new Dimension(80, 32), event -> dialog.dispose());
+        JButton confirmBtn = createStyledButton("确定", ACCENT_COLOR, new Dimension(80, 32), event -> {
             String contactName = nameField.getText().trim();
             if (contactName.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "联系人姓名不能为空！", "提示", JOptionPane.WARNING_MESSAGE);
+                showWarnMessage("联系人姓名不能为空！");
                 return;
             }
-
             if (contactName.equals(userId)) {
-                JOptionPane.showMessageDialog(dialog, "不能添加自己为联系人！", "提示", JOptionPane.WARNING_MESSAGE);
+                showWarnMessage("不能添加自己为联系人！");
                 return;
             }
-
             for (int i = 0; i < contactListModel.getSize(); i++) {
                 if (contactListModel.getElementAt(i).equals(contactName)) {
-                    JOptionPane.showMessageDialog(dialog, "联系人已存在！", "提示", JOptionPane.WARNING_MESSAGE);
+                    showWarnMessage("联系人已存在！");
                     return;
                 }
             }
-
             contactListModel.addElement(contactName);
-
-            JOptionPane.showMessageDialog(dialog, "联系人添加成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
+            showInfoMessage("联系人添加成功！", "提示");
             dialog.dispose();
         });
 
@@ -435,51 +395,32 @@ public class ChatFrame extends JFrame {
         LOGGER.info("开始加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
         isLoading.set(true);
         try {
-            // 获取更早的历史消息
             List<Message> moreMessages = MessageManager.INSTANCE.getConversationMessages(
                     userId, currentContact, MESSAGE_LIMIT, currentOffset);
-
-            if (moreMessages.isEmpty()) {
+            if (moreMessages.isEmpty())
                 return;
-            }
-
-            // 确保历史消息按时间戳正序排列
             moreMessages.sort(Comparator.comparing(Message::getTimestamp)
                     .thenComparing(Message::getMessageId));
-
-            // 过滤掉已经显示的消息（防止重复）
             moreMessages.removeIf(msg -> msg.getMessageId() >= lastDisplayedMessageId);
 
-            if (moreMessages.isEmpty()) {
+            if (moreMessages.isEmpty())
                 return;
-            }
-
-            // 记录当前滚动位置
             int scrollPos = chatScroll.getVerticalScrollBar().getValue();
 
-            // 构建要插入的历史消息文本
             StringBuilder sb = new StringBuilder();
-            for (Message msg : moreMessages) {
+            for (Message msg : moreMessages)
                 sb.append(formatMessage(msg)).append("\n");
-            }
             String newMessages = sb.toString();
 
-            // 将历史消息插入到聊天区域的开头
             chatArea.insert(newMessages, 0);
-
-            // 更新偏移量
             currentOffset += moreMessages.size();
 
-            // 计算新增内容的高度并调整滚动位置
             FontMetrics fm = chatArea.getFontMetrics(chatArea.getFont());
             int lineCount = countLines(newMessages);
             int addedHeight = lineCount * fm.getHeight();
 
-            // 保持用户当前查看位置不变
-            SwingUtilities.invokeLater(() -> {
-                chatScroll.getVerticalScrollBar().setValue(scrollPos + addedHeight);
-            });
-
+            chatScroll.getVerticalScrollBar().setValue(scrollPos + addedHeight);
+            LOGGER.info("已加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
         } finally {
             isLoading.set(false);
         }
@@ -501,48 +442,32 @@ public class ChatFrame extends JFrame {
     private void sendMessage(ActionEvent e) {
         String receiver = contactList.getSelectedValue();
         if (receiver == null) {
-            JOptionPane.showMessageDialog(this, "请先选择一个联系人", "提示", JOptionPane.WARNING_MESSAGE);
+            showWarnMessage("请先选择一个联系人");
             return;
         }
 
         String content = inputField.getText().trim();
-        if (content.isEmpty()) {
+        if (content.isEmpty())
             return;
-        }
 
         Message message = MessageService.getInstance().newTempMessage(receiver, content);
         ChatService.getInstance().sendMessage(message);
         inputField.setText("");
 
-        // 发送的新消息添加到聊天区域底部
         chatArea.append(formatMessage(message) + "\n");
-
-        // 更新最后显示的消息ID（如果message有ID的话）
-        if (message.getMessageId() > lastDisplayedMessageId) {
+        if (message.getMessageId() > lastDisplayedMessageId)
             lastDisplayedMessageId = message.getMessageId();
-        }
-
-        // 滚动到底部显示新消息
-        SwingUtilities.invokeLater(() -> {
-            chatArea.setCaretPosition(chatArea.getDocument().getLength());
-        });
+        SwingUtilities.invokeLater(() -> chatArea.setCaretPosition(chatArea.getDocument().getLength()));
     }
 
     public void receiveMessage(Message message) {
-        // 只有当前聊天对象的消息才显示
         if ((message.getSender().equals(currentContact) || message.getReceiver().equals(currentContact))) {
-
+            int pos = chatArea.getCaretPosition();
             chatArea.append(formatMessage(message) + "\n");
-
-            // 更新最后显示的消息ID
-            if (message.getMessageId() > lastDisplayedMessageId) {
+            if(chatArea.getCaretPosition() - pos < 10)
+                SwingUtilities.invokeLater(() -> chatArea.setCaretPosition(chatArea.getDocument().getLength()));
+            if (message.getMessageId() > lastDisplayedMessageId)
                 lastDisplayedMessageId = message.getMessageId();
-            }
-
-            // 滚动到底部显示新消息
-            SwingUtilities.invokeLater(() -> {
-                chatArea.setCaretPosition(chatArea.getDocument().getLength());
-            });
         }
     }
 }

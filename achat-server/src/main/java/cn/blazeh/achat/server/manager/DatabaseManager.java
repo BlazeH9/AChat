@@ -45,7 +45,7 @@ public enum DatabaseManager {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch(ClassNotFoundException e) {
-            throw new RuntimeException("数据库连接初始化时出现异常", e);
+            throw new RuntimeException("数据库管理器初始化时出现异常", e);
         }
     }
 
@@ -67,6 +67,14 @@ public enum DatabaseManager {
         } catch(SQLException e) {
             LOGGER.error("数据库连接异常关闭", e);
         }
+    }
+
+    public String getUrl() {
+        return URL;
+    }
+
+    public String getUsername() {
+        return USERNAME;
     }
 
 }

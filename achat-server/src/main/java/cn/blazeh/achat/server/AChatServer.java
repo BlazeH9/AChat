@@ -40,10 +40,30 @@ public class AChatServer {
     private ConnectionService connectionService;
     private UserService userService;
 
+    private static final String BANNER = """
+            
+                  ___           ___           ___           ___                \s
+                 /  /\\         /  /\\         /__/\\         /  /\\          ___  \s
+                /  /::\\       /  /:/         \\  \\:\\       /  /::\\        /  /\\ \s
+               /  /:/\\:\\     /  /:/           \\__\\:\\     /  /:/\\:\\      /  /:/ \s
+              /  /:/~/::\\   /  /:/  ___   ___ /  /::\\   /  /:/~/::\\    /  /:/  \s
+             /__/:/ /:/\\:\\ /__/:/  /  /\\ /__/\\  /:/\\:\\ /__/:/ /:/\\:\\  /  /::\\  \s
+             \\  \\:\\/:/__\\/ \\  \\:\\ /  /:/ \\  \\:\\/:/__\\/ \\  \\:\\/:/__\\/ /__/:/\\:\\ \s
+              \\  \\::/       \\  \\:\\  /:/   \\  \\::/       \\  \\::/      \\__\\/  \\:\\\s
+               \\  \\:\\        \\  \\:\\/:/     \\  \\:\\        \\  \\:\\           \\  \\:\\
+                \\  \\:\\        \\  \\::/       \\  \\:\\        \\  \\:\\           \\__\\/
+                 \\__\\/         \\__\\/         \\__\\/         \\__\\/               \s
+            
+                2025 AChat - A Simple Chat Server\s
+            
+            """;
+
     public void initDao() {
+        LOGGER.info("正在加载数据库，地址：{}", DatabaseManager.INSTANCE.getUrl());
         messageDao = new MessageDao();
         userDao = new UserDao();
         IdGenerator.setCounter(messageDao.getMaxId());
+        LOGGER.info("数据库加载完成");
     }
 
     public void initManager() {
@@ -52,6 +72,7 @@ public class AChatServer {
         messageManager = new MessageManager(messageDao);
         sessionManager = new SessionManager();
         userManager = new UserManager(userDao);
+        LOGGER.info("管理器加载完成");
     }
 
     public void initService() {
@@ -59,6 +80,7 @@ public class AChatServer {
         authService = new AuthService(userManager, sessionManager);
         chatService = new ChatService(connectionService, inboxManager, messageManager, userManager);
         userService = new UserService(inboxManager, userManager, sessionManager, messageManager);
+        LOGGER.info("服务加载完成");
     }
 
     public void start() throws Exception {
@@ -91,6 +113,8 @@ public class AChatServer {
     }
 
     public static void main(String[] args) throws Exception {
+        LOGGER.info("服务器启动中");
+        System.out.println(BANNER);
         AChatServer server = new AChatServer();
         server.initDao();
         server.initManager();

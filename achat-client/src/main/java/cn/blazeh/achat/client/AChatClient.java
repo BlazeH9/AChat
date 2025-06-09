@@ -9,8 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class AChatClient {
 
@@ -20,24 +18,35 @@ public class AChatClient {
     private ChatFrame chatFrame;
     private final AuthService authService = new AuthService();
 
+    private static final String BANNER = """
+
+                  ___           ___           ___           ___                \s
+                 /  /\\         /  /\\         /__/\\         /  /\\          ___  \s
+                /  /::\\       /  /:/         \\  \\:\\       /  /::\\        /  /\\ \s
+               /  /:/\\:\\     /  /:/           \\__\\:\\     /  /:/\\:\\      /  /:/ \s
+              /  /:/~/::\\   /  /:/  ___   ___ /  /::\\   /  /:/~/::\\    /  /:/  \s
+             /__/:/ /:/\\:\\ /__/:/  /  /\\ /__/\\  /:/\\:\\ /__/:/ /:/\\:\\  /  /::\\  \s
+             \\  \\:\\/:/__\\/ \\  \\:\\ /  /:/ \\  \\:\\/:/__\\/ \\  \\:\\/:/__\\/ /__/:/\\:\\ \s
+              \\  \\::/       \\  \\:\\  /:/   \\  \\::/       \\  \\::/      \\__\\/  \\:\\\s
+               \\  \\:\\        \\  \\:\\/:/     \\  \\:\\        \\  \\:\\           \\  \\:\\
+                \\  \\:\\        \\  \\::/       \\  \\:\\        \\  \\:\\           \\__\\/
+                 \\__\\/         \\__\\/         \\__\\/         \\__\\/               \s
+            
+                2025 AChat - A Simple Chat Client\s
+            
+            """;
+
     public void start(String host, int port) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         authFrame = new AuthFrame(authService, () -> {
-            chatFrame = new ChatFrame(SessionManager.INSTANCE.getSession().getUserId());
+            chatFrame = new ChatFrame(SessionManager.INSTANCE.getSession().getUserId(), this::stop);
+            LOGGER.debug("聊天页面已创建完成");
             chatFrame.setVisible(true);
-            chatFrame.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    stop();
-                }
-            });
-        });
-        authFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                stop();
-            }
-        });
+            LOGGER.info("聊天页面已显示");
+        }, this::stop);
         ConnectionManager.INSTANCE.connect(this, host, port);
         authFrame.setVisible(true);
+        LOGGER.info("认证页面已显示");
     }
 
     public void stop() {
@@ -45,6 +54,8 @@ public class AChatClient {
     }
 
     public static void main(String[] args) throws Exception {
+        LOGGER.info("客户端启动中");
+        System.out.println(BANNER);
         final AChatClient client = new AChatClient();
         client.start("localhost", 8080);
     }

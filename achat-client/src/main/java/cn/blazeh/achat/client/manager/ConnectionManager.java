@@ -31,6 +31,7 @@ public enum ConnectionManager {
     public Optional<ChannelFuture> connect(AChatClient client, String host, int port) throws InterruptedException {
         if(isConnected())
             return Optional.empty();
+        LOGGER.info("正在连接服务器 {}:{}", host, port);
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
