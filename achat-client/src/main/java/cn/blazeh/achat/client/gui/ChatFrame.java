@@ -357,7 +357,7 @@ public class ChatFrame extends BaseFrame {
                 return;
             }
             for (int i = 0; i < contactListModel.getSize(); i++) {
-                if (contactListModel.getElementAt(i).equals(contactName)) {
+                if (contactListModel.get(i).equals(contactName)) {
                     showWarnMessage("联系人已存在！");
                     return;
                 }
@@ -530,13 +530,18 @@ public class ChatFrame extends BaseFrame {
      * @param message 接收到的消息对象
      */
     public void receiveMessage(Message message) {
-        if ((message.getSender().equals(currentContact) || message.getReceiver().equals(currentContact))) {
+        if((message.getSender().equals(currentContact) || message.getReceiver().equals(currentContact))) {
             int pos = chatArea.getCaretPosition();
             chatArea.append(formatMessage(message) + "\n");
             if(chatArea.getCaretPosition() - pos < 10)
                 SwingUtilities.invokeLater(() -> chatArea.setCaretPosition(chatArea.getDocument().getLength()));
             if(message.getMessageId() > lastDisplayedMessageId)
                 lastDisplayedMessageId = message.getMessageId();
+        } else {
+            for(int i = 0; i < contactListModel.getSize(); i++)
+                if(contactListModel.get(i).equals(message.getSender()))
+                    return;
+            contactListModel.addElement(message.getSender());
         }
     }
 }
