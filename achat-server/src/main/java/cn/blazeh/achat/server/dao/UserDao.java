@@ -15,9 +15,9 @@ public class UserDao {
 
     private static final Logger LOGGER = LogManager.getLogger(UserDao.class);
 
-    private static final String INSERT_SQL = "INSERT INTO user (user_id, password) VALUES (?, ?)";
+    private static final String INSERT_SQL = "INSERT INTO user (user_id, password, salt) VALUES (?, ?, ?)";
     private static final String SELECT_SQL = "SELECT * FROM user WHERE user_id = ?";
-    private static final String UPDATE_SQL = "UPDATE user SET password = ? WHERE user_id = ?";
+    private static final String UPDATE_SQL = "UPDATE user SET password = ?, salt = ? WHERE user_id = ?";
 
     private Connection getConnection() {
         return DatabaseManager.INSTANCE.getConnection();
@@ -28,6 +28,7 @@ public class UserDao {
             PreparedStatement ps = connection.prepareStatement(INSERT_SQL)) {
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getPassword());
+            ps.setString(3, user.getSalt());
             return ps.executeUpdate() > 0;
         } catch(SQLException e) {
             LOGGER.error("存储用户{}的数据时出现异常", user.getUserId(), e);
@@ -41,7 +42,9 @@ public class UserDao {
             ps.setString(1, userId);
             try(ResultSet rs = ps.executeQuery()) {
                 if(rs.next())
-                    return Optional.of(new User(rs.getString("user_id"), rs.getString("password")));
+                    return Optional.of(
+                            new User(rs.getString("user_id"), rs.getString("password"), rs.getString("salt"))
+                    );
             }
             return Optional.empty();
         } catch(SQLException e) {
@@ -54,7 +57,8 @@ public class UserDao {
         try(Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement(UPDATE_SQL)) {
             ps.setString(1, user.getPassword());
-            ps.setString(2, user.getUserId());
+            ps.setString(2, user.getSalt());
+            ps.setString(3, user.getUserId());
             return ps.executeUpdate() > 0;
         } catch(SQLException e) {
             LOGGER.error("更新用户{}的数据时出现异常", user.getUserId(), e);

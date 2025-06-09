@@ -23,13 +23,13 @@ public class MessageDao {
     private static final String SELECT_USER_SQL =
             "SELECT * FROM messages " +
                     "WHERE sender = ? OR receiver = ? " +
-                    "ORDER BY timestamp DESC " +
+                    "ORDER BY message_id DESC " +
                     "LIMIT ? OFFSET ?";
 
     private static final String SELECT_CONVERSATION_SQL =
             "SELECT * FROM messages " +
                     "WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) " +
-                    "ORDER BY timestamp DESC " +
+                    "ORDER BY message_id DESC " +
                     "LIMIT ? OFFSET ?";
 
     private static final String SELECT_LATEST_MESSAGE_ID_SQL =

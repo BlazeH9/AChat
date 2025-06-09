@@ -2,27 +2,26 @@ package cn.blazeh.achat.server.model;
 
 public class User {
 
-    private String userId;
-    private String password;
+    private final String userId;
+    private final String password;
+    private final String salt;
 
-    public User(String userId, String password) {
+    public User(String userId, String password, String salt) {
         this.userId = userId;
         this.password = password;
+        this.salt = salt;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getSalt() {
+        return salt;
     }
+
 }

@@ -2,6 +2,7 @@ package cn.blazeh.achat.server.manager;
 
 import cn.blazeh.achat.server.dao.UserDao;
 import cn.blazeh.achat.server.model.User;
+import cn.blazeh.achat.server.util.DigestUtils;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -17,7 +18,7 @@ public class UserManager {
 
     public boolean check(String userId, String password) {
         return userId != null && userDao.selectUser(userId)
-                .map(user -> user.getPassword().equals(password))
+                .map(user -> DigestUtils.hashWithSalt(password, user.getSalt()).equals(user.getPassword()))
                 .orElse(false);
     }
 
@@ -26,7 +27,10 @@ public class UserManager {
             return false;
         return userDao.selectUser(userId)
                 .map(ignored -> false)
-                .orElseGet(() -> userDao.insertUser(new User(userId, password)));
+                .orElseGet(() -> {
+                    String salt = DigestUtils.generateSalt();
+                    return userDao.insertUser(new User(userId, DigestUtils.hashWithSalt(password, salt), salt));
+                });
     }
 
     public boolean checkUserId(String userId) {
