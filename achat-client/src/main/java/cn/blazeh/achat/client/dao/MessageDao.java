@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 消息数据访问对象，提供消息的数据库操作接口，实现消息的增删查改功能
+ */
 public class MessageDao {
 
     private static final String INSERT_SQL =
@@ -37,10 +40,19 @@ public class MessageDao {
 
     private static final String SELECT_CONTACTS_SQL = "SELECT sender FROM messages UNION SELECT receiver FROM messages;";
 
+    /**
+     * 获取数据库连接
+     * @return 数据库连接对象
+     */
     private Connection getConnection() {
         return DatabaseManager.INSTANCE.getConnection();
     }
 
+    /**
+     * 结果集转消息对象
+     * @param rs 查询结果集
+     * @return 消息对象实例
+     */
     private Message toMessage(ResultSet rs) throws SQLException {
         return MessageFactory.newBuilder()
                 .setMessageId(rs.getLong("message_id"))
@@ -52,6 +64,11 @@ public class MessageDao {
                 .build();
     }
 
+    /**
+     * 插入新消息
+     * @param message 待插入的消息对象
+     * @return 插入操作是否成功
+     */
     public boolean insertMessage(Message message) throws SQLException {
         try(PreparedStatement ps = getConnection().prepareStatement(INSERT_SQL)) {
             ps.setLong(1, message.getMessageId());
@@ -64,6 +81,11 @@ public class MessageDao {
         }
     }
 
+    /**
+     * 删除指定消息
+     * @param messageId 目标消息ID
+     * @return 删除操作是否成功
+     */
     public boolean deleteMessage(long messageId) throws SQLException {
         try(PreparedStatement ps = getConnection().prepareStatement(DELETE_SQL)) {
             ps.setLong(1, messageId);
@@ -71,6 +93,11 @@ public class MessageDao {
         }
     }
 
+    /**
+     * 通过ID查询消息
+     * @param messageId 目标消息ID
+     * @return 消息对象的Optional封装
+     */
     public Optional<Message> selectMessageById(long messageId) throws SQLException {
         try(PreparedStatement ps = getConnection().prepareStatement(SELECT_ID_SQL)) {
             ps.setLong(1, messageId);
@@ -82,9 +109,17 @@ public class MessageDao {
         return Optional.empty();
     }
 
+    /**
+     * 查询用户相关消息
+     * @param userId 目标用户ID
+     * @param limit 返回消息最大数量
+     * @param offset 消息偏移量
+     * @return 消息列表
+     */
     public List<Message> selectUserMessages(String userId, int limit, int offset) throws SQLException {
         List<Message> messages = new ArrayList<>();
         try(PreparedStatement ps = getConnection().prepareStatement(SELECT_USER_SQL)) {
+            // 设置查询参数
             ps.setString(1, userId);
             ps.setString(2, userId);
             ps.setInt(3, limit);
@@ -98,9 +133,18 @@ public class MessageDao {
         return messages;
     }
 
+    /**
+     * 查询会话消息
+     * @param user1 用户1的ID
+     * @param user2 用户2的ID
+     * @param limit 返回消息最大数量
+     * @param offset 消息偏移量
+     * @return 消息列表
+     */
     public List<Message> selectConversationMessages(String user1, String user2, int limit, int offset) throws SQLException {
         List<Message> messages = new ArrayList<>();
         try(PreparedStatement ps = getConnection().prepareStatement(SELECT_CONVERSATION_SQL)) {
+            // 设置双向查询参数
             ps.setString(1, user1);
             ps.setString(2, user2);
             ps.setString(3, user2);
@@ -116,9 +160,13 @@ public class MessageDao {
         return messages;
     }
 
+    /**
+     * 获取最新消息ID
+     * @return 当前最大消息ID
+     */
     public long getLatestMessageId() throws SQLException {
         try(Statement ps = getConnection().createStatement();
-             ResultSet rs = ps.executeQuery(SELECT_LATEST_MESSAGE_ID_SQL)) {
+            ResultSet rs = ps.executeQuery(SELECT_LATEST_MESSAGE_ID_SQL)) {
             if(rs.next()) {
                 return rs.getLong(1);
             }
@@ -126,6 +174,10 @@ public class MessageDao {
         return 0;
     }
 
+    /**
+     * 获取所有联系人
+     * @return 联系人ID列表
+     */
     public List<String> getContacts() throws SQLException {
         List<String> contacts = new ArrayList<>();
         try(PreparedStatement ps = getConnection().prepareStatement(SELECT_CONTACTS_SQL)) {

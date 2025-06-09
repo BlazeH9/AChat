@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+/**
+ * 数据库Manager，单例模式，负责数据库连接管理和表结构初始化
+ */
 public enum DatabaseManager {
 
     INSTANCE;
@@ -24,6 +27,9 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 创建消息数据表，如果已经存在则不会进行任何操作
+     */
     private void createTables() throws SQLException {
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS messages (
@@ -41,6 +47,11 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 获取数据库连接
+     * @return 可用的数据库连接对象
+     * 连接失效时自动重建连接
+     */
     public Connection getConnection() {
         try {
             if(connection == null || connection.isClosed())
@@ -52,6 +63,9 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 关闭数据库连接并释放资源
+     */
     public void close() {
         try {
             if(connection != null && !connection.isClosed())

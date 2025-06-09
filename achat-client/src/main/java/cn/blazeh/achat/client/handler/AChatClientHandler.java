@@ -9,6 +9,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 客户端处理器，根据消息类型进行消息转发
+ */
 public class AChatClientHandler extends SimpleChannelInboundHandler<AChatEnvelope> {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatClientHandler.class);

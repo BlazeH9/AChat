@@ -12,6 +12,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 主服务端处理器，负责分发不同类型的网络消息。
+ * 处理连接生命周期和消息路由逻辑
+ */
 @ChannelHandler.Sharable
 public class AChatServerHandler extends SimpleChannelInboundHandler<AChatEnvelope> {
 
@@ -64,6 +68,10 @@ public class AChatServerHandler extends SimpleChannelInboundHandler<AChatEnvelop
         ctx.close();
     }
 
+    /**
+     * 创建新的消息信封构建器
+     * @return 初始化后的信封构建器实例
+     */
     public static AChatEnvelope.Builder getEnvelopeBuilder() {
         return AChatEnvelope.newBuilder()
                 .setTimestamp(System.currentTimeMillis())

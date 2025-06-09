@@ -16,6 +16,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+/**
+ * 用户实力相关服务
+ */
 public class UserService {
 
     private static final Logger LOGGER = LogManager.getLogger(UserService.class);
@@ -34,6 +37,12 @@ public class UserService {
         this.messageManager = messageManager;
     }
 
+    /**
+     * 用户注册方法
+     * @param userId 用户ID
+     * @param password 密码
+     * @return 是否注册成功
+     */
     public boolean register(String userId, String password) {
         if(users.containsKey(userId) || !userManager.add(userId, password))
             return false;
@@ -47,6 +56,12 @@ public class UserService {
         });
     }
 
+    /**
+     * 用户登录方法
+     * @param userId 用户ID
+     * @param password 密码
+     * @return 是否登录成功
+     */
     public boolean login(String userId, String password) {
         if(!userManager.check(userId, password))
             return false;
@@ -60,11 +75,20 @@ public class UserService {
         });
     }
 
+    /**
+     * 用户退出登录方法
+     * @param userId 用户ID
+     */
     public void logout(String userId) {
         userManager.save(users.remove(userId));
         LOGGER.info("{}退出登录", userId);
     }
 
+    /**
+     * 对指定用户的信箱执行一系列操作，操作完成后将清空信箱
+     * @param userId 用户ID
+     * @param consumer 要执行的操作
+     */
     public void flushInbox(String userId, Consumer<Message> consumer) {
         sessionManager.getSession(userId).map(UserSession::getSessionId).ifPresent(sessionId -> {
             inboxManager.getMessages(userId).stream()
@@ -75,10 +99,20 @@ public class UserService {
         });
     }
 
+    /**
+     * 通过会话ID获取用户ID
+     * @param sessionId 会话ID
+     * @return 用户ID
+     */
     public Optional<String> getUserId(UUID sessionId) {
         return sessionManager.getUserId(sessionId);
     }
 
+    /**
+     * 通过用户ID获取对应的用户实例
+     * @param userId 用户ID
+     * @return 用户实例
+     */
     public Optional<User> getUser(String userId) {
         return Optional.ofNullable(users.get(userId));
     }

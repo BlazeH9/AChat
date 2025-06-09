@@ -21,6 +21,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 
+/**
+ * 服务端主类
+ */
 public class AChatServer {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatServer.class);
@@ -58,6 +61,9 @@ public class AChatServer {
             
             """;
 
+    /**
+     * 初始化DAO层
+     */
     public void initDao() {
         LOGGER.info("正在加载数据库，地址：{}", DatabaseManager.INSTANCE.getUrl());
         messageDao = new MessageDao();
@@ -66,6 +72,9 @@ public class AChatServer {
         LOGGER.info("数据库加载完成");
     }
 
+    /**
+     * 初始化Manager层
+     */
     public void initManager() {
         channelManager = new ChannelManager();
         inboxManager = new InboxManager();
@@ -75,6 +84,9 @@ public class AChatServer {
         LOGGER.info("管理器加载完成");
     }
 
+    /**
+     * 初始化Service层
+     */
     public void initService() {
         connectionService = new ConnectionService(channelManager, sessionManager);
         authService = new AuthService(userManager, sessionManager);
@@ -83,6 +95,10 @@ public class AChatServer {
         LOGGER.info("服务加载完成");
     }
 
+    /**
+     * 启动服务器
+     * @throws Exception
+     */
     public void start() throws Exception {
         EventLoopGroup bossGroup = new MultiThreadIoEventLoopGroup(1, NioIoHandler.newFactory());
         EventLoopGroup workerGroup = new MultiThreadIoEventLoopGroup(0, NioIoHandler.newFactory());

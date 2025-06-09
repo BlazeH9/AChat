@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
+/**
+ * 命令行交互处理器
+ */
 public class InputHandler implements Runnable {
 
     private static final Logger LOGGER = LogManager.getLogger(InputHandler.class);

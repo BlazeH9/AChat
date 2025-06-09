@@ -14,6 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+/**
+ * 认证窗口界面，提供用户登录和注册功能，处理认证流程的UI交互
+ */
 public class AuthFrame extends BaseFrame {
 
     private static final Logger LOGGER = LogManager.getLogger(AuthFrame.class);
@@ -28,6 +31,12 @@ public class AuthFrame extends BaseFrame {
     private final JPasswordField regPassword = new JPasswordField(15);
     private final JPasswordField regConfirmPassword = new JPasswordField(15);
 
+    /**
+     * 创建认证窗口
+     * @param authService 认证服务实例
+     * @param onLoginSuccess 登录成功回调函数
+     * @param onClose 窗口关闭回调函数
+     */
     public AuthFrame(AuthService authService, Runnable onLoginSuccess, Runnable onClose) {
         super(onClose);
         this.authService = authService;
@@ -44,6 +53,9 @@ public class AuthFrame extends BaseFrame {
         applyModernStyling();
     }
 
+    /**
+     * 初始化用户界面，构建认证窗口布局
+     */
     private void initUI() {
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.WHITE);
@@ -78,6 +90,10 @@ public class AuthFrame extends BaseFrame {
         add(footerPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * 创建顶部标题面板
+     * @return 包含标题的头部面板
+     */
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(PRIMARY_COLOR);
@@ -102,6 +118,9 @@ public class AuthFrame extends BaseFrame {
         return headerPanel;
     }
 
+    /**
+     * 配置标签页组件，设置标签页样式
+     */
     private void setupTabbedPane() {
         tabbedPane.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
         tabbedPane.setBackground(Color.WHITE);
@@ -112,6 +131,10 @@ public class AuthFrame extends BaseFrame {
         UIManager.put("TabbedPane.contentBorderInsets", new Insets(10, 0, 0, 0));
     }
 
+    /**
+     * 创建登录面板
+     * @return 包含登录表单的面板
+     */
     private JPanel createLoginPanel() {
         JPanel loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
@@ -139,6 +162,10 @@ public class AuthFrame extends BaseFrame {
         return loginPanel;
     }
 
+    /**
+     * 创建注册面板
+     * @return 包含注册表单的面板
+     */
     private JPanel createRegisterPanel() {
         JPanel regPanel = new JPanel();
         regPanel.setLayout(new BoxLayout(regPanel, BoxLayout.Y_AXIS));
@@ -170,6 +197,12 @@ public class AuthFrame extends BaseFrame {
         return regPanel;
     }
 
+    /**
+     * 创建输入字段组
+     * @param labelText 字段标签文本
+     * @param textField 输入框组件
+     * @return 包含标签和输入框的面板
+     */
     private JPanel createInputGroup(String labelText, JTextField textField) {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setBackground(Color.WHITE);
@@ -178,7 +211,7 @@ public class AuthFrame extends BaseFrame {
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 13));
         label.setForeground(TEXT_COLOR);
-        
+
         textField.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 14));
         textField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(220, 220, 220), 1, true),
@@ -186,7 +219,7 @@ public class AuthFrame extends BaseFrame {
         ));
         textField.setPreferredSize(new Dimension(0, 40));
         textField.setBackground(Color.WHITE);
-        
+
         textField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -211,6 +244,10 @@ public class AuthFrame extends BaseFrame {
         return panel;
     }
 
+    /**
+     * 创建页脚面板
+     * @return 包含版权信息的页脚面板
+     */
     private JPanel createFooterPanel() {
         JPanel footerPanel = new JPanel(new BorderLayout());
         footerPanel.setBackground(LIGHT_GRAY);
@@ -225,6 +262,10 @@ public class AuthFrame extends BaseFrame {
         return footerPanel;
     }
 
+    /**
+     * 认证前置检查，验证当前认证状态是否允许操作
+     * @return 是否允许进行认证操作
+     */
     private boolean beforeAuth() {
         System.out.println(SessionManager.INSTANCE.getSession().getAuthState());
         switch(SessionManager.INSTANCE.getSession().getAuthState()) {
@@ -235,6 +276,10 @@ public class AuthFrame extends BaseFrame {
         return SessionManager.INSTANCE.getSession().getAuthState().equals(Session.AuthState.READY);
     }
 
+    /**
+     * 执行登录操作，处理登录表单提交
+     * @param e 触发事件
+     */
     private void performLogin(ActionEvent e) {
         if(!beforeAuth())
             return;
@@ -250,6 +295,10 @@ public class AuthFrame extends BaseFrame {
         authService.sendAuthRequest(username, password, false);
     }
 
+    /**
+     * 执行注册操作，处理注册表单提交
+     * @param e 触发事件
+     */
     private void performRegister(ActionEvent e) {
         if(!beforeAuth())
             return;
@@ -276,12 +325,20 @@ public class AuthFrame extends BaseFrame {
         authService.sendAuthRequest(username, password, true);
     }
 
+    /**
+     * 处理认证成功事件，关闭窗口并执行回调
+     * @param msg 成功提示消息
+     */
     public void authSuccess(String msg) {
         showInfoMessage(msg, "成功");
         dispose();
         onLoginSuccess.run();
     }
 
+    /**
+     * 处理认证失败事件，显示错误提示
+     * @param msg 失败提示消息
+     */
     public void authFailed(String msg) {
         showWarnMessage(msg);
     }

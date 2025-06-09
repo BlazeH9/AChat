@@ -40,6 +40,11 @@ public class ChatFrame extends BaseFrame {
 
     private long lastDisplayedMessageId = 0;
 
+    /**
+     * 创建聊天窗口
+     * @param userId 当前用户ID
+     * @param onClose 窗口关闭时的回调函数
+     */
     public ChatFrame(String userId, Runnable onClose) {
         super(onClose);
         this.userId = userId;
@@ -59,6 +64,9 @@ public class ChatFrame extends BaseFrame {
         applyModernStyling();
     }
 
+    /**
+     * 初始化联系人列表，从消息管理器加载联系人
+     */
     private void initContacts() {
         MessageManager.INSTANCE.getContacts().forEach(contact -> {
             if (!contact.equals(userId)) {
@@ -67,6 +75,9 @@ public class ChatFrame extends BaseFrame {
         });
     }
 
+    /**
+     * 初始化用户界面，构建主界面布局
+     */
     private void initUI() {
         setLayout(new BorderLayout());
 
@@ -95,6 +106,10 @@ public class ChatFrame extends BaseFrame {
         }
     }
 
+    /**
+     * 创建左侧面板
+     * @return 包含联系人列表的面板
+     */
     private JPanel createLeftPanel() {
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBackground(SECONDARY_COLOR);
@@ -136,6 +151,9 @@ public class ChatFrame extends BaseFrame {
         return leftPanel;
     }
 
+    /**
+     * 配置联系人列表组件，设置渲染器和选择监听器
+     */
     private void setupContactList() {
         contactList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         contactList.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 13));
@@ -190,6 +208,10 @@ public class ChatFrame extends BaseFrame {
         });
     }
 
+    /**
+     * 创建右侧面板
+     * @return 包含聊天区域的面板
+     */
     private JPanel createRightPanel() {
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBackground(Color.WHITE);
@@ -239,6 +261,9 @@ public class ChatFrame extends BaseFrame {
         return rightPanel;
     }
 
+    /**
+     * 配置聊天区域组件，设置文本区域样式
+     */
     private void setupChatArea() {
         chatArea.setEditable(false);
         chatArea.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 12));
@@ -249,6 +274,10 @@ public class ChatFrame extends BaseFrame {
         chatArea.setForeground(TEXT_COLOR);
     }
 
+    /**
+     * 创建输入面板
+     * @return 包含输入框和发送按钮的面板
+     */
     private JPanel createInputPanel() {
         JPanel inputPanel = new JPanel(new BorderLayout(10, 0));
         inputPanel.setBackground(Color.WHITE);
@@ -272,6 +301,10 @@ public class ChatFrame extends BaseFrame {
         return inputPanel;
     }
 
+    /**
+     * 显示添加联系人对话框
+     * @param e 触发事件
+     */
     private void showAddContactDialog(ActionEvent e) {
         JDialog dialog = new JDialog(this, "添加联系人", true);
         dialog.setSize(350, 180);
@@ -347,6 +380,11 @@ public class ChatFrame extends BaseFrame {
         nameField.requestFocus();
     }
 
+    /**
+     * 格式化消息显示
+     * @param message 待格式化的消息对象
+     * @return 格式化后的消息字符串
+     */
     private String formatMessage(Message message) {
         boolean isMyMessage = message.getSender().equals(userId);
         String timeStr = DATE_FORMAT.format(new Date(message.getTimestamp()));
@@ -355,6 +393,10 @@ public class ChatFrame extends BaseFrame {
         return String.format("[%s] %s:\n%s\n", timeStr, senderName, message.getContent());
     }
 
+    /**
+     * 显示指定联系人的聊天记录
+     * @param contact 目标联系人ID
+     */
     private void showChat(String contact) {
         isLoading.set(true);
         try {
@@ -388,6 +430,9 @@ public class ChatFrame extends BaseFrame {
         }
     }
 
+    /**
+     * 加载更多历史消息
+     */
     private void loadMoreMessages() {
         if (currentContact == null || isLoading.get()) {
             return;
@@ -426,6 +471,11 @@ public class ChatFrame extends BaseFrame {
         }
     }
 
+    /**
+     * 计算消息文本行数
+     * @param str 消息文本内容
+     * @return 文本行数
+     */
     private int countLines(String str) {
         if (str == null || str.isEmpty()) {
             return 0;
@@ -439,6 +489,10 @@ public class ChatFrame extends BaseFrame {
         return lines;
     }
 
+    /**
+     * 发送消息操作
+     * @param e 触发事件
+     */
     private void sendMessage(ActionEvent e) {
         String receiver = contactList.getSelectedValue();
         if (receiver == null) {
@@ -460,6 +514,10 @@ public class ChatFrame extends BaseFrame {
         SwingUtilities.invokeLater(() -> chatArea.setCaretPosition(chatArea.getDocument().getLength()));
     }
 
+    /**
+     * 接收并显示新消息
+     * @param message 接收到的消息对象
+     */
     public void receiveMessage(Message message) {
         if ((message.getSender().equals(currentContact) || message.getReceiver().equals(currentContact))) {
             int pos = chatArea.getCaretPosition();

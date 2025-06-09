@@ -9,6 +9,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * 数据库连接管理器（单例模式），负责数据库连接的创建、维护和关闭
+ */
 public enum DatabaseManager {
 
     INSTANCE;
@@ -49,6 +52,11 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 获取数据库连接实例（自动重连）
+     * @return 可用的数据库连接对象
+     * @throws RuntimeException
+     */
     public Connection getConnection() {
         try {
             if(connection == null || connection.isClosed())
@@ -60,6 +68,9 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 关闭数据库连接
+     */
     public void close() {
         try {
             if(connection != null && !connection.isClosed())
@@ -69,10 +80,16 @@ public enum DatabaseManager {
         }
     }
 
+    /**
+     * 获取配置的数据库连接URL
+     */
     public String getUrl() {
         return URL;
     }
 
+    /**
+     * 获取配置的数据库用户名
+     */
     public String getUsername() {
         return USERNAME;
     }

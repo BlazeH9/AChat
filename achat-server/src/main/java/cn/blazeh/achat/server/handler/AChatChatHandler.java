@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
+/**
+ * 聊天数据包处理器
+ */
 public class AChatChatHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatChatHandler.class);

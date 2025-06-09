@@ -12,20 +12,34 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 消息服务管理类，处理临时消息的创建、存储和转换
+ */
 public class MessageService extends ClientService {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final Logger LOGGER = LogManager.getLogger(MessageService.class);
+    /** 临时消息存储映射表 */
     private final Map<Long, Message> tempMessages = new ConcurrentHashMap<>();
 
     private static final MessageService INSTANCE = new MessageService();
 
     private MessageService() {}
 
+    /**
+     * 获取消息服务单例实例
+     * @return 消息服务实例
+     */
     public static MessageService getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * 创建新的临时消息对象
+     * @param receiverId 消息接收者ID
+     * @param content 消息内容
+     * @return 创建的临时消息对象
+     */
     public Message newTempMessage(String receiverId, String content) {
         Message message = MessageFactory.newBuilder()
                 .setTimestamp(System.currentTimeMillis())
@@ -38,14 +52,27 @@ public class MessageService extends ClientService {
         return message;
     }
 
+    /**
+     * 添加消息到临时存储
+     * @param message 要添加的消息对象
+     */
     public void addTempMessage(Message message) {
         tempMessages.put(message.getMessageId(), message);
     }
 
+    /**
+     * 从临时存储中移除消息
+     * @param messageId 要移除的消息ID
+     */
     public void removeTempMessage(long messageId) {
         tempMessages.remove(messageId);
     }
 
+    /**
+     * 保存临时消息到持久化存储
+     * @param orgMsgId 原始消息ID
+     * @param newMsgId 新分配的消息ID
+     */
     public void saveTempMessage(long orgMsgId, long newMsgId) {
         Message msg = tempMessages.get(orgMsgId);
         if(msg == null)
@@ -67,6 +94,11 @@ public class MessageService extends ClientService {
         }
     }
 
+    /**
+     * 将时间戳转换为可读格式
+     * @param timestamp 要转换的时间戳
+     * @return 格式化后的日期时间字符串
+     */
     public static String parseTimestamp(long timestamp) {
         return DATE_FORMAT.format(new Date(timestamp));
     }

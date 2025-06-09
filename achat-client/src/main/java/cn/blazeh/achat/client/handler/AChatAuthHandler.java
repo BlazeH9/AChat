@@ -11,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
+/**
+ * 用户认证处理器
+ */
 public class AChatAuthHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatAuthHandler.class);

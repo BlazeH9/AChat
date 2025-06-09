@@ -19,6 +19,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * 连接Manager，单例模式，负责网络连接的建立、断开和状态管理
+ */
 public enum ConnectionManager {
 
     INSTANCE;
@@ -28,6 +31,13 @@ public enum ConnectionManager {
     private final EventLoopGroup group = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
+    /**
+     * 连接到指定服务器
+     * @param client 聊天客户端实例
+     * @param host 服务器主机地址
+     * @param port 服务器端口号
+     * @return 连接结果的ChannelFuture
+     */
     public Optional<ChannelFuture> connect(AChatClient client, String host, int port) throws InterruptedException {
         if(isConnected())
             return Optional.empty();
@@ -57,6 +67,9 @@ public enum ConnectionManager {
         return Optional.of(future);
     }
 
+    /**
+     * 断开当前连接
+     */
     public void disconnect() {
         if(!isConnected())
             return;
@@ -68,6 +81,10 @@ public enum ConnectionManager {
         connected.set(false);
     }
 
+    /**
+     * 检查当前连接状态
+     * @return 是否已建立连接
+     */
     public boolean isConnected() {
         return connected.get();
     }

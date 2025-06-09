@@ -8,6 +8,9 @@ import cn.blazeh.achat.common.model.Message;
 import cn.blazeh.achat.common.proto.MessageProto.*;
 import io.netty.channel.ChannelHandlerContext;
 
+/**
+ * 聊天消息处理器
+ */
 public class AChatChatHandler implements AChatHandler {
 
     private final AChatClient client;

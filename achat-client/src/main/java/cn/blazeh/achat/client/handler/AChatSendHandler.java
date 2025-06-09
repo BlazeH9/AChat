@@ -7,6 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 聊天消息回执处理器
+ */
 public class AChatSendHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatSendHandler.class);

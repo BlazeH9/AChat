@@ -10,6 +10,9 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 认证处理器
+ */
 public class AChatAuthHandler implements AChatHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatAuthHandler.class);
