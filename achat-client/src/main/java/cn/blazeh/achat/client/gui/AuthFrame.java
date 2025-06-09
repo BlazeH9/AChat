@@ -177,7 +177,7 @@ public class AuthFrame extends BaseFrame {
         JPanel confirmPanel = createInputGroup("🔐 确认密码", regConfirmPassword);
 
         Dimension size = new Dimension(120, 42);
-        JButton regBtn = createStyledButton("注册", 14, PRIMARY_COLOR, size, this::performLogin);
+        JButton regBtn = createStyledButton("注册", 14, PRIMARY_COLOR, size, this::performRegister);
         regBtn.setMaximumSize(size);
         regBtn.setMinimumSize(size);
         regBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -267,7 +267,6 @@ public class AuthFrame extends BaseFrame {
      * @return 是否允许进行认证操作
      */
     private boolean beforeAuth() {
-        System.out.println(SessionManager.INSTANCE.getSession().getAuthState());
         switch(SessionManager.INSTANCE.getSession().getAuthState()) {
             case PREPARING -> showWarnMessage("尚未连接服务器，请稍后再试");
             case PENDING -> showWarnMessage("正在等待服务器验证响应，请勿重复发送验证请求");
