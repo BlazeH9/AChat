@@ -4,6 +4,7 @@ import cn.blazeh.achat.client.gui.AuthFrame;
 import cn.blazeh.achat.client.gui.ChatFrame;
 import cn.blazeh.achat.client.manager.ConnectionManager;
 import cn.blazeh.achat.client.manager.SessionManager;
+import cn.blazeh.achat.client.model.ClientConfig;
 import cn.blazeh.achat.client.service.AuthService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,7 +73,7 @@ public class AChatClient {
         LOGGER.info("客户端启动中");
         System.out.println(BANNER);
         final AChatClient client = new AChatClient();
-        client.start("localhost", 8080);
+        client.start(ClientConfig.getHost(), ClientConfig.getPort());
     }
 
     /**

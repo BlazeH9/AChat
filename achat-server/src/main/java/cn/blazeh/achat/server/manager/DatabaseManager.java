@@ -1,5 +1,6 @@
 package cn.blazeh.achat.server.manager;
 
+import cn.blazeh.achat.server.util.ServerConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,35 +19,18 @@ public enum DatabaseManager {
 
     private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
 
-    private static final String URL;
-    private static final String USERNAME;
-    private static final String PASSWORD;
-    private Connection connection;
+    private final String URL;
+    private final String USERNAME;
+    private final String PASSWORD;
 
-    static {
-        Properties prop = new Properties();
-        try {
-            if(new File("./server.properties").exists()) {
-                try(InputStream input = new FileInputStream("./server.properties")) {
-                    prop.load(input);
-                }
-            } else {
-                prop.load(DatabaseManager.class.getResourceAsStream("/server.properties"));
-                try(OutputStream output = new FileOutputStream("./server.properties")) {
-                    prop.store(output, "AChat Server Configurations");
-                }
-            }
-            URL = prop.getProperty("db.url");
-            USERNAME = prop.getProperty("db.username");
-            PASSWORD = prop.getProperty("db.password");
-        } catch (Exception e) {
-            throw new RuntimeException("加载配置文件server.properties失败", e);
-        }
-    }
+    private Connection connection;
 
     DatabaseManager() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            URL = ServerConfig.getUrl();
+            USERNAME = ServerConfig.getUsername();
+            PASSWORD = ServerConfig.getPassword();
         } catch(ClassNotFoundException e) {
             throw new RuntimeException("数据库管理器初始化时出现异常", e);
         }

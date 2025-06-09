@@ -7,6 +7,7 @@ import cn.blazeh.achat.server.handler.AChatServerHandler;
 import cn.blazeh.achat.server.manager.*;
 import cn.blazeh.achat.server.service.*;
 import cn.blazeh.achat.server.util.IdGenerator;
+import cn.blazeh.achat.server.util.ServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioIoHandler;
@@ -27,7 +28,6 @@ import javax.sql.DataSource;
 public class AChatServer {
 
     private static final Logger LOGGER = LogManager.getLogger(AChatServer.class);
-    private static final int PORT = 8080;
 
     private MessageDao messageDao;
     private UserDao userDao;
@@ -119,8 +119,8 @@ public class AChatServer {
                                     .addLast(new AChatServerHandler(authService, chatService, connectionService, userService));
                         }
                     });
-            ChannelFuture future = bootstrap.bind(PORT).sync();
-            LOGGER.info("服务器已开启，监听端口：{}", PORT);
+            ChannelFuture future = bootstrap.bind(ServerConfig.getHost(), ServerConfig.getPort()).sync();
+            LOGGER.info("服务器已开启，监听地址：{}:{}", ServerConfig.getHost(), ServerConfig.getPort());
             future.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
