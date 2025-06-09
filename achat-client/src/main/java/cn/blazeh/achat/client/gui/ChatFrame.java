@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChatFrame extends JFrame {
 
@@ -36,7 +37,7 @@ public class ChatFrame extends JFrame {
     private String currentContact = null;
     private int currentOffset = 0;
     private static final int MESSAGE_LIMIT = 20;
-    private boolean isLoading = false;
+    private final AtomicBoolean isLoading = new AtomicBoolean(false);
     private JScrollPane chatScroll;
 
     // 添加消息ID追踪，确保不重复显示消息
@@ -214,12 +215,12 @@ public class ChatFrame extends JFrame {
         chatScroll.getViewport().setBackground(Color.WHITE);
 
         // 添加滚动监听器
-        chatScroll.getVerticalScrollBar().addAdjustmentListener(e -> {
+        chatScroll.getVerticalScrollBar().addAdjustmentListener(e -> SwingUtilities.invokeLater(() -> {
             JScrollBar scrollBar = (JScrollBar) e.getSource();
-            if (scrollBar.getValue() == 0 && !e.getValueIsAdjusting() && !isLoading) {
+            if (scrollBar.getValue() == 0 && !e.getValueIsAdjusting() && !isLoading.get()) {
                 loadMoreMessages();
             }
-        });
+        }));
 
         // 输入区域
         JPanel inputPanel = createInputPanel();
@@ -395,50 +396,44 @@ public class ChatFrame extends JFrame {
     }
 
     private void showChat(String contact) {
-        currentContact = contact;
-        currentOffset = 0;
-        lastDisplayedMessageId = 0; // 重置消息ID追踪
+        isLoading.set(true);
+        try {
+            currentContact = contact;
+            currentOffset = 0;
+            lastDisplayedMessageId = 0;
 
-        // 清空聊天区域
-        chatArea.setText("");
+            chatArea.setText("");
 
-        // 获取最新的消息
-        List<Message> messages = MessageManager.INSTANCE.getConversationMessages(
-                userId, contact, MESSAGE_LIMIT, currentOffset);
+            List<Message> messages = MessageManager.INSTANCE.getConversationMessages(
+                    userId, contact, MESSAGE_LIMIT, currentOffset);
+            if (messages.isEmpty())
+                return;
+            messages.sort(Comparator.comparing(Message::getTimestamp)
+                    .thenComparing(Message::getMessageId));
 
-        if (messages.isEmpty()) {
-            return;
+            currentOffset = messages.size();
+            lastDisplayedMessageId = messages.get(messages.size() - 1).getMessageId();
+
+            StringBuilder sb = new StringBuilder();
+            for (Message msg : messages)
+                sb.append(formatMessage(msg)).append("\n");
+            chatArea.setText(sb.toString());
+
+            SwingUtilities.invokeLater(() -> {
+                chatArea.setCaretPosition(chatArea.getDocument().getLength());
+                LOGGER.info("已显示与{}的聊天，滚动条：{}", contact, chatScroll.getVerticalScrollBar().getValue());
+            });
+        } finally {
+            isLoading.set(false);
         }
-
-        // 确保消息按时间戳正序排列（最早的在前，最新的在后）
-        messages.sort(Comparator.comparing(Message::getTimestamp)
-                .thenComparing(Message::getMessageId));
-
-        // 更新偏移量和最后显示的消息ID
-        currentOffset = messages.size();
-        lastDisplayedMessageId = messages.get(messages.size() - 1).getMessageId();
-
-        // 添加消息到聊天区域（按时间顺序从上到下显示）
-        StringBuilder sb = new StringBuilder();
-        for (Message msg : messages) {
-            sb.append(formatMessage(msg)).append("\n");
-        }
-        chatArea.setText(sb.toString());
-
-        // 滚动到底部显示最新消息
-        SwingUtilities.invokeLater(() -> {
-            JScrollBar verticalBar = chatScroll.getVerticalScrollBar();
-            verticalBar.setValue(verticalBar.getMaximum());
-            chatArea.setCaretPosition(chatArea.getDocument().getLength());
-        });
     }
 
     private void loadMoreMessages() {
-        if (currentContact == null || isLoading) {
+        if (currentContact == null || isLoading.get()) {
             return;
         }
-
-        isLoading = true;
+        LOGGER.info("开始加载更多聊天记录，滚动条：{}", chatScroll.getVerticalScrollBar().getValue());
+        isLoading.set(true);
         try {
             // 获取更早的历史消息
             List<Message> moreMessages = MessageManager.INSTANCE.getConversationMessages(
@@ -486,7 +481,7 @@ public class ChatFrame extends JFrame {
             });
 
         } finally {
-            isLoading = false;
+            isLoading.set(false);
         }
     }
 
